@@ -2,6 +2,7 @@
   "version": 2,
   "projects": {
     "clipz": "apps/clipz",
+    "clipz-common-components-header": "libs/clipz/common/components/header",
     "clipz-e2e": "apps/clipz-e2e"
   }
 }

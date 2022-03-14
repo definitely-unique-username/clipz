@@ -15,6 +15,9 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@clipz/common/components/header": [
+        "libs/clipz/common/components/header/src/index.ts"
+      ]
     }
   },
   "exclude": ["node_modules", "tmp"]

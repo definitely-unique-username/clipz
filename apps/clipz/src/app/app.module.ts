@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { HeaderModule } from '@clipz/common/components/header';
 
 import { AppComponent } from './app.component';
 
@@ -7,6 +8,7 @@ import { AppComponent } from './app.component';
   declarations: [AppComponent],
   imports: [
     BrowserModule,
+    HeaderModule
   ],
   providers: [],
   bootstrap: [AppComponent],
