@@ -2,7 +2,9 @@
   "version": 2,
   "projects": {
     "clipz": "apps/clipz",
+    "clipz-auth": "libs/clipz/auth",
     "clipz-common-components-header": "libs/clipz/common/components/header",
+    "clipz-common-components-modal": "libs/clipz/common/components/modal",
     "clipz-e2e": "apps/clipz-e2e"
   }
 }

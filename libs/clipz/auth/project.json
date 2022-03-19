@@ -1,0 +1,26 @@
+{
+  "projectType": "library",
+  "root": "libs/clipz/auth",
+  "sourceRoot": "libs/clipz/auth/src",
+  "prefix": "clipz",
+  "targets": {
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/clipz/auth"],
+      "options": {
+        "jestConfig": "libs/clipz/auth/jest.config.js",
+        "passWithNoTests": true
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "libs/clipz/auth/src/**/*.ts",
+          "libs/clipz/auth/src/**/*.html"
+        ]
+      }
+    }
+  },
+  "tags": []
+}

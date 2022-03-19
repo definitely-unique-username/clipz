@@ -18,7 +18,8 @@
               }
             ]
           }
-        ]
+        ],
+        "no-inferrable-types": false
       }
     },
     {

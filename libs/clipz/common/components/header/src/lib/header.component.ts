@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'clipz-header',
@@ -6,11 +6,10 @@ import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
   styleUrls: ['./header.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent {
+  @Output() public readonly loginClick: EventEmitter<void> = new EventEmitter<void>();
 
-  constructor() { }
-
-  ngOnInit(): void {
+  public onLoginClick(): void {
+    this.loginClick.emit();
   }
-
 }
