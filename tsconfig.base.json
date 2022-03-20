@@ -16,11 +16,15 @@
     "baseUrl": ".",
     "paths": {
       "@clipz/auth": ["libs/clipz/auth/src/index.ts"],
-      "@clipz/common/components/header": [
+      "@clipz/util": ["libs/clipz/common/util/src/index.ts"],
+      "@clipz/components/header": [
         "libs/clipz/common/components/header/src/index.ts"
       ],
       "@clipz/components/modal": [
         "libs/clipz/common/components/modal/src/index.ts"
+      ],
+      "@clipz/components/tabs": [
+        "libs/clipz/common/components/tabs/src/index.ts"
       ]
     }
   },

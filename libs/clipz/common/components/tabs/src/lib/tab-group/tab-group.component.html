@@ -1,0 +1,15 @@
+<!-- Tabs -->
+<ul class="flex flex-wrap mb-4">
+  <li *ngFor="let tab of tabs; let index = index; trackBy: trackByIndex" class="flex-auto text-center">
+    <button (click)="changeSelectedTab(index)" type="button"
+      class="block rounded py-3 px-4 transition w-full"
+      [ngClass]="{
+        'hover:text:indigo-400': index !== selectedTabIndex,
+        'hover:text-white text-white bg-indigo-400': index === selectedTabIndex
+      }">
+      {{tab.title}}
+    </button>
+  </li>
+</ul>
+
+<ng-content select="clipz-tab"></ng-content>

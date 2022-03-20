@@ -1,0 +1,26 @@
+{
+  "projectType": "library",
+  "root": "libs/clipz/common/components/tabs",
+  "sourceRoot": "libs/clipz/common/components/tabs/src",
+  "prefix": "clipz",
+  "targets": {
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/clipz/common/components/tabs"],
+      "options": {
+        "jestConfig": "libs/clipz/common/components/tabs/jest.config.js",
+        "passWithNoTests": true
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "libs/clipz/common/components/tabs/src/**/*.ts",
+          "libs/clipz/common/components/tabs/src/**/*.html"
+        ]
+      }
+    }
+  },
+  "tags": []
+}

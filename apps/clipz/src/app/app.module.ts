@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { HeaderModule } from '@clipz/common/components/header';
+import { HeaderModule } from '@clipz/components/header';
 import { ClipzAuthModule } from '@clipz/auth';
 
 import { AppComponent } from './app.component';
