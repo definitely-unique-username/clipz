@@ -1,0 +1,111 @@
+<!-- Registration Form -->
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <!-- Name -->
+  <div class="mb-3">
+    <label class="inline-block mb-2">Name</label>
+    <input type="text" formControlName="name"
+      class="block w-full py-1.5 px-3 text-gray-200 border border-gray-400 transition duration-500 focus:outline-none rounded bg-transparent focus:border-indigo-400"
+      placeholder="Enter Name" />
+    <ng-container *ngIf="nameControl.touched && nameControl.dirty">
+      <ng-container *ngIf="nameControl.errors as errors">
+        <p *ngIf="errors?.['required']" class="text-red-400">
+          Field is required
+        </p>
+        <p *ngIf="errors?.['minlength'] as error" class="text-red-400">
+          The value you inputted is {{error.actualLength}} characters long.
+          It must be at least {{error.requiredLength}} characters long.
+        </p>
+      </ng-container>
+    </ng-container>
+  </div>
+  <!-- Email -->
+  <div class="mb-3">
+    <label class="inline-block mb-2">Email</label>
+    <input type="email" formControlName="email"
+      class="block w-full py-1.5 px-3 text-gray-200 border border-gray-400 transition duration-500 focus:outline-none rounded bg-transparent focus:border-indigo-400"
+      placeholder="Enter Email" />
+      <ng-container *ngIf="emailControl.touched && emailControl.dirty">
+        <ng-container *ngIf="emailControl.errors as errors">
+          <p *ngIf="errors?.['required']" class="text-red-400">
+            Field is required
+          </p>
+          <p *ngIf="errors?.['email']" class="text-red-400">
+            You must enter a valid email.
+          </p>
+        </ng-container>
+      </ng-container>
+  </div>
+  <!-- Age -->
+  <div class="mb-3">
+    <label class="inline-block mb-2">Age</label>
+    <input type="number" formControlName="age"
+      class="block w-full py-1.5 px-3 text-gray-200 border border-gray-400 transition duration-500 focus:outline-none rounded bg-transparent focus:border-indigo-400"
+      placeholder="Enter Age" />
+      <ng-container *ngIf="ageControl.touched && ageControl.dirty">
+        <ng-container *ngIf="ageControl.errors as errors">
+          <p *ngIf="errors?.['required']" class="text-red-400">
+            Field is required.
+          </p>
+          <p *ngIf="errors?.['min'] as error" class="text-red-400">
+            Value too low.
+          </p>
+        </ng-container>
+      </ng-container>
+  </div>
+  <!-- Password -->
+  <div class="mb-3">
+    <label class="inline-block mb-2">Password</label>
+    <input type="password" formControlName="password"
+      class="block w-full py-1.5 px-3 text-gray-200 border border-gray-400 transition duration-500 focus:outline-none rounded bg-transparent focus:border-indigo-400"
+      placeholder="Enter Password" />
+      <ng-container *ngIf="passwordControl.touched && passwordControl.dirty">
+        <ng-container *ngIf="passwordControl.errors as errors">
+          <p *ngIf="errors?.['required']" class="text-red-400">
+            Field is required.
+          </p>
+          <p *ngIf="errors?.['pattern']" class="text-red-400">
+            Password must be at least 8 characters long, have 1 uppercase letter, 1 lowercase letter, 1 number and 1 special character.
+          </p>
+        </ng-container>
+      </ng-container>
+  </div>
+  <!-- Confirm Password -->
+  <div class="mb-3">
+    <label class="inline-block mb-2">Confirm Password</label>
+    <input type="password" formControlName="confirmPassword"
+      class="block w-full py-1.5 px-3 text-gray-200 border border-gray-400 transition duration-500 focus:outline-none rounded bg-transparent focus:border-indigo-400"
+      placeholder="Confirm Password" />
+      <ng-container *ngIf="confirmPasswordControl.touched && confirmPasswordControl.dirty">
+        <ng-container *ngIf="confirmPasswordControl.errors as errors">
+          <p *ngIf="errors?.['required']" class="text-red-400">
+            Field is required.
+          </p>
+        </ng-container>
+      </ng-container>
+  </div>
+  <!-- Phone Number -->
+  <div class="mb-3">
+    <label class="inline-block mb-2">Phone Number</label>
+    <input type="text" formControlName="phone"
+      class="block w-full py-1.5 px-3 text-gray-200 border border-gray-400 transition duration-500 focus:outline-none rounded bg-transparent focus:border-indigo-400"
+      placeholder="Enter Phone Number"
+      mask="(000) 000-0000"
+      />
+      <ng-container *ngIf="phoneControl.touched && phoneControl.dirty">
+        <ng-container *ngIf="phoneControl.errors as errors">
+          <p *ngIf="errors?.['required']" class="text-red-400">
+            Field is required.
+          </p>
+          <p *ngIf="errors?.['minlength'] || errors['maxlength']" class="text-red-400">
+            Phone sould be 10 digits long.
+          </p>
+        </ng-container>
+      </ng-container>
+  </div>
+  <button type="submit"
+    class="block w-full bg-indigo-400 text-white py-1.5 px-3 rounded transition hover:bg-indigo-500 disabled:opacity-50 disabled:bg-indigo-400"
+    [disabled]="disabled"
+    >
+    Submit
+  </button>
+</form>
