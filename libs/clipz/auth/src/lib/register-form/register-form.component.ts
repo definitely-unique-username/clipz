@@ -1,6 +1,6 @@
 import { Component, ChangeDetectionStrategy, Input, OnChanges, SimpleChanges, SimpleChange, Output, EventEmitter } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { RegisterForm } from './register-form.model';
+import { RegisterData } from './register-data.model';
 
 @Component({
   selector: 'clipz-register-form',
@@ -17,14 +17,14 @@ export class RegisterFormComponent implements OnChanges {
   @Input() public phone: string | null = null;
   @Input() public disabled: boolean = false;
 
-  @Output() public submit: EventEmitter<RegisterForm> = new EventEmitter<RegisterForm>();
+  @Output() public submitted: EventEmitter<RegisterData> = new EventEmitter<RegisterData>();
 
   public nameControl: FormControl = new FormControl(this.name, [Validators.required, Validators.minLength(3)]);
   public emailControl: FormControl = new FormControl(this.email, [Validators.required, Validators.email]);
   public ageControl: FormControl = new FormControl(this.age, [Validators.required, Validators.min(18)]);
   public passwordControl: FormControl = new FormControl(this.password, [Validators.required, Validators.pattern(/^(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[^\w\d\s:])([^\s]){8,16}$/)]);
   public confirmPasswordControl: FormControl = new FormControl(this.confirmPassword, [Validators.required]);
-  public phoneControl: FormControl = new FormControl(this.phone, [Validators.required, Validators.min(10), Validators.max(10)]);
+  public phoneControl: FormControl = new FormControl(this.phone, [Validators.required, Validators.minLength(10), Validators.maxLength(10)]);
 
   public form: FormGroup = new FormGroup({
     name: this.nameControl,
@@ -78,7 +78,7 @@ export class RegisterFormComponent implements OnChanges {
 
   public onSubmit(): void {
     if (this.form.valid) {
-      this.submit.emit(this.form.value);
+      this.submitted.emit(this.form.value);
     }
   }
 }

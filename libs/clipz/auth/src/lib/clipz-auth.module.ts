@@ -8,13 +8,14 @@ import { RegisterFormComponent } from './register-form/register-form.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NgxMaskModule } from 'ngx-mask';
 
+
 @NgModule({
   imports: [
     CommonModule,
     ClipzModalModule,
     ClipzTabsModule,
     ReactiveFormsModule,
-    NgxMaskModule.forRoot()
+    NgxMaskModule.forRoot(),
   ],
   declarations: [
     AuthModalComponent,
@@ -23,4 +24,4 @@ import { NgxMaskModule } from 'ngx-mask';
   ],
   exports: [AuthModalComponent, LoginFormComponent, RegisterFormComponent]
 })
-export class ClipzAuthModule {}
+export class ClipzAuthModule { }

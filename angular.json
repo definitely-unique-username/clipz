@@ -7,6 +7,7 @@
     "clipz-common-components-modal": "libs/clipz/common/components/modal",
     "clipz-common-components-tabs": "libs/clipz/common/components/tabs",
     "clipz-common-util": "libs/clipz/common/util",
+    "clipz-core": "libs/clipz/core",
     "clipz-e2e": "apps/clipz-e2e"
   }
 }

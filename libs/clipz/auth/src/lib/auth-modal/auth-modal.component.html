@@ -3,10 +3,10 @@
 
   <clipz-tab-group>
     <clipz-tab title="Login">
-     <clipz-login-form></clipz-login-form>
+     <clipz-login-form (login)="onLogin($event)"></clipz-login-form>
     </clipz-tab>
     <clipz-tab title="Register">
-      <clipz-register-form></clipz-register-form>
+      <clipz-register-form (submitted)="onRegister($event)"></clipz-register-form>
     </clipz-tab>
   </clipz-tab-group>
 </clipz-modal>

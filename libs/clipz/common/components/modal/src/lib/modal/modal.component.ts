@@ -1,6 +1,6 @@
-import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import { DOCUMENT } from '@angular/common';
-import { Component, ChangeDetectionStrategy, Input, Output, EventEmitter, SimpleChanges, ElementRef, Inject, OnInit } from '@angular/core';
+import { Component, ChangeDetectionStrategy, Input, Output, EventEmitter, SimpleChanges, ElementRef, Inject, OnInit, OnDestroy } from '@angular/core';
+import { CoerceBoolean } from '@clipz/util';
 
 let id: number = 0;
 
@@ -10,9 +10,9 @@ let id: number = 0;
   styleUrls: ['./modal.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ModalComponent implements OnInit {
-  @Input() public visible: boolean | null = false;
-  @Input() public closeOnBackdropClick: boolean = true;
+export class ModalComponent implements OnInit, OnDestroy {
+  @CoerceBoolean() @Input() public visible: boolean | null = false;
+  @CoerceBoolean() @Input() public closeOnBackdropClick: boolean = true;
 
   @Output() public readonly modalClose: EventEmitter<void> = new EventEmitter<void>();
   @Output() public readonly backdropClick: EventEmitter<void> = new EventEmitter<void>();
@@ -24,18 +24,12 @@ export class ModalComponent implements OnInit {
     this.id = `modal-${id}`;
   }
 
-  public ngOnChanges(changes: SimpleChanges): void {
-    if (changes['visible']) {
-      this.visible = coerceBooleanProperty(this.visible);
-    }
-
-    if (changes['closeOnBackdropClick']) {
-      this.closeOnBackdropClick = coerceBooleanProperty(this.closeOnBackdropClick);
-    }
-  }
-
   public ngOnInit(): void {
       this.document.body.appendChild(this.elRef.nativeElement);
+  }
+
+  public ngOnDestroy(): void {
+    this.document.body.removeChild(this.elRef.nativeElement);
   }
 
   public onClose(): void {

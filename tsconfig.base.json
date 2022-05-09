@@ -16,7 +16,6 @@
     "baseUrl": ".",
     "paths": {
       "@clipz/auth": ["libs/clipz/auth/src/index.ts"],
-      "@clipz/util": ["libs/clipz/common/util/src/index.ts"],
       "@clipz/components/header": [
         "libs/clipz/common/components/header/src/index.ts"
       ],
@@ -25,7 +24,9 @@
       ],
       "@clipz/components/tabs": [
         "libs/clipz/common/components/tabs/src/index.ts"
-      ]
+      ],
+      "@clipz/core": ["libs/clipz/core/src/index.ts"],
+      "@clipz/util": ["libs/clipz/common/util/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
