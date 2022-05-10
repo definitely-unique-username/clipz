@@ -1,6 +1,6 @@
 module.exports = {
-  displayName: 'clipz-common-components-header',
-  preset: '../../../../../jest.preset.js',
+  displayName: 'clipz-shell',
+  preset: '../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   globals: {
     'ts-jest': {
@@ -8,8 +8,7 @@ module.exports = {
       stringifyContentPathRegex: '\\.(html|svg)$',
     },
   },
-  coverageDirectory:
-    '../../../../../coverage/libs/clipz/common/components/header',
+  coverageDirectory: '../../../coverage/libs/clipz/shell',
   transform: {
     '^.+\\.(ts|mjs|js|html)$': 'jest-preset-angular',
   },

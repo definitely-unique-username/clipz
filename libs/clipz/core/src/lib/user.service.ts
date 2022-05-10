@@ -8,12 +8,11 @@ import { from, Observable } from 'rxjs';
 })
 export class UserService {
   protected readonly collectionName: string = 'users';
-  public readonly collectionRef: CollectionReference<DocumentData>  = collection(this.firestore, this.collectionName);
+  protected readonly collectionRef: CollectionReference<DocumentData>  = collection(this.firestore, this.collectionName);
 
   constructor(
     private readonly firestore: Firestore
-  ) {
-   }
+  ) {}
 
    public createUser(uid: string, user: User): Observable<void> { 
      return from(

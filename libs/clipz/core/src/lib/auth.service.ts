@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { Auth, createUserWithEmailAndPassword, user, UserCredential, signInWithEmailAndPassword, signOut , updateProfile} from "@angular/fire/auth";
+import { Auth, createUserWithEmailAndPassword, user, UserCredential, signInWithEmailAndPassword, signOut , updateProfile, fetchSignInMethodsForEmail} from "@angular/fire/auth";
 import { FirebaseUser, User } from "@clipz/util";
 import { from, map, mapTo, Observable, switchMap, switchMapTo } from "rxjs";
 import { UserService } from "./user.service";
@@ -35,6 +35,12 @@ export class AuthService {
         return from(signOut(this.auth));
     }
 
+    public emailTaken(email: string): Observable<boolean> {
+        return this.fetchSignInMethodsForEmail(email).pipe(
+            map((methods: string[]) => methods.length > 0)
+        );
+    }
+
     private createUserWithEmailAndPassword(email: string, password: string): Observable<UserCredential> {
         return from(createUserWithEmailAndPassword(this.auth, email, password));
     }
@@ -45,5 +51,9 @@ export class AuthService {
 
     private signInWithEmailAndPassword(email: string, password: string): Observable<UserCredential> {
         return from(signInWithEmailAndPassword(this.auth, email, password));
+    }
+
+    private fetchSignInMethodsForEmail(email: string): Observable<string[]> {
+        return from(fetchSignInMethodsForEmail(this.auth, email));
     }
 }

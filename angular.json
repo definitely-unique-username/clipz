@@ -2,12 +2,14 @@
   "version": 2,
   "projects": {
     "clipz": "apps/clipz",
+    "clipz-about": "libs/clipz/about",
     "clipz-auth": "libs/clipz/auth",
-    "clipz-common-components-header": "libs/clipz/common/components/header",
     "clipz-common-components-modal": "libs/clipz/common/components/modal",
     "clipz-common-components-tabs": "libs/clipz/common/components/tabs",
     "clipz-common-util": "libs/clipz/common/util",
     "clipz-core": "libs/clipz/core",
-    "clipz-e2e": "apps/clipz-e2e"
+    "clipz-e2e": "apps/clipz-e2e",
+    "clipz-home": "libs/clipz/home",
+    "clipz-shell": "libs/clipz/shell"
   }
 }

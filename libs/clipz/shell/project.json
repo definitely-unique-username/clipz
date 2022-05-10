@@ -1,0 +1,26 @@
+{
+  "projectType": "library",
+  "root": "libs/clipz/shell",
+  "sourceRoot": "libs/clipz/shell/src",
+  "prefix": "clipz",
+  "targets": {
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/clipz/shell"],
+      "options": {
+        "jestConfig": "libs/clipz/shell/jest.config.js",
+        "passWithNoTests": true
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "libs/clipz/shell/src/**/*.ts",
+          "libs/clipz/shell/src/**/*.html"
+        ]
+      }
+    }
+  },
+  "tags": []
+}

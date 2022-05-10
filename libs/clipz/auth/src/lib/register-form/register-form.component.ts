@@ -1,5 +1,7 @@
 import { Component, ChangeDetectionStrategy, Input, OnChanges, SimpleChanges, SimpleChange, Output, EventEmitter } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { EmailTakenValidator } from '@clipz/core';
+import { match } from '@clipz/util';
 import { RegisterData } from './register-data.model';
 
 @Component({
@@ -20,7 +22,7 @@ export class RegisterFormComponent implements OnChanges {
   @Output() public submitted: EventEmitter<RegisterData> = new EventEmitter<RegisterData>();
 
   public nameControl: FormControl = new FormControl(this.name, [Validators.required, Validators.minLength(3)]);
-  public emailControl: FormControl = new FormControl(this.email, [Validators.required, Validators.email]);
+  public emailControl: FormControl = new FormControl(this.email, [Validators.required, Validators.email], [this.emailTakenValidator.validate]);
   public ageControl: FormControl = new FormControl(this.age, [Validators.required, Validators.min(18)]);
   public passwordControl: FormControl = new FormControl(this.password, [Validators.required, Validators.pattern(/^(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[^\w\d\s:])([^\s]){8,16}$/)]);
   public confirmPasswordControl: FormControl = new FormControl(this.confirmPassword, [Validators.required]);
@@ -33,7 +35,9 @@ export class RegisterFormComponent implements OnChanges {
     password: this.passwordControl,
     confirmPassword: this.confirmPasswordControl,
     phone: this.phoneControl
-  });
+  }, [match('password', 'confirmPassword')]);
+
+  constructor(private readonly emailTakenValidator: EmailTakenValidator){}
 
   public ngOnChanges(changes: SimpleChanges): void {
     const nameChange: SimpleChange = changes['name'];
