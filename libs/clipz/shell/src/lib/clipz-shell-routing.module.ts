@@ -16,6 +16,12 @@ const routes: Routes = [{
             loadChildren: () => import('@clipz/about')
                 .then((m: typeof import('@clipz/about')) => m.ClipzAboutModule)
         },
+        {
+            path: 'video',
+            loadChildren: () => import('@clipz/video/shell')
+                .then((m: typeof import('@clipz/video/shell')) => m.ClipzVideoFeatureShellModule)
+        },
+        { path: '**', redirectTo: '' }
     ]
 }];
 

@@ -12,7 +12,8 @@ export class UserService {
 
   constructor(
     private readonly firestore: Firestore
-  ) {}
+  ) {
+  }
 
    public createUser(uid: string, user: User): Observable<void> { 
      return from(
