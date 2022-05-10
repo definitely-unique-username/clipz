@@ -1,4 +1,5 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { Router } from '@angular/router';
 import { RegisterData, LoginData } from '@clipz/auth';
 import { AuthService } from '@clipz/core';
 import { BehaviorSubject, Observable, distinctUntilChanged } from 'rxjs';
@@ -16,7 +17,8 @@ export class ShellComponent {
   public readonly auth$: Observable<boolean> = this.authService.auth$;
 
   constructor(
-    private readonly authService: AuthService
+    private readonly authService: AuthService, 
+    private readonly router: Router
   ) {
   }
 
@@ -44,6 +46,7 @@ export class ShellComponent {
 
   public onLogout(): void {
     this.authService.logout().subscribe({
+      next: () => this.router.navigate(['/']),
       error: () => alert('Error')
     })
   }
