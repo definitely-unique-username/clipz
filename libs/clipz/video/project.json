@@ -1,0 +1,26 @@
+{
+  "projectType": "library",
+  "root": "libs/clipz/video",
+  "sourceRoot": "libs/clipz/video/src",
+  "prefix": "clipz",
+  "targets": {
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/clipz/video"],
+      "options": {
+        "jestConfig": "libs/clipz/video/jest.config.js",
+        "passWithNoTests": true
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "libs/clipz/video/src/**/*.ts",
+          "libs/clipz/video/src/**/*.html"
+        ]
+      }
+    }
+  },
+  "tags": []
+}

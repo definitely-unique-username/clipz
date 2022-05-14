@@ -28,7 +28,8 @@
       "@clipz/manage": ["libs/clipz/manage/src/index.ts"],
       "@clipz/shell": ["libs/clipz/shell/src/index.ts"],
       "@clipz/upload": ["libs/clipz/upload/src/index.ts"],
-      "@clipz/util": ["libs/clipz/common/util/src/index.ts"]
+      "@clipz/util": ["libs/clipz/common/util/src/index.ts"],
+      "@clipz/video": ["libs/clipz/video/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

@@ -12,6 +12,7 @@
     "clipz-home": "libs/clipz/home",
     "clipz-manage": "libs/clipz/manage",
     "clipz-shell": "libs/clipz/shell",
-    "clipz-upload": "libs/clipz/upload"
+    "clipz-upload": "libs/clipz/upload",
+    "clipz-video": "libs/clipz/video"
   }
 }
