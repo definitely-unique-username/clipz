@@ -5,6 +5,7 @@ module.exports = {
   content: [
     join(__dirname, 'src/**/!(*.stories|*.spec).{ts,html}'),
     ...createGlobPatternsForDependencies(__dirname),
+    join(__dirname, 'libs/**/*'),
   ],
   safelist: ['bg-blue-400', 'bg-green-400', 'bg-red-400'],
   theme: {

@@ -1,8 +1,10 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
-import { Router } from '@angular/router';
+import { Data, Router } from '@angular/router';
 import { RegisterData, LoginData } from '@clipz/auth';
 import { AuthService } from '@clipz/core';
+import { getData } from '@clipz/util';
 import { BehaviorSubject, Observable, distinctUntilChanged } from 'rxjs';
+import { map } from 'rxjs/operators'
 
 @Component({
   selector: 'clipz-shell',
@@ -13,13 +15,10 @@ import { BehaviorSubject, Observable, distinctUntilChanged } from 'rxjs';
 export class ShellComponent {
   private readonly authModalVisibleSource: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   public readonly authModalVisible$: Observable<boolean> = this.authModalVisibleSource.asObservable().pipe(distinctUntilChanged());
-  
+
   public readonly auth$: Observable<boolean> = this.authService.auth$;
 
-  constructor(
-    private readonly authService: AuthService, 
-    private readonly router: Router
-  ) {
+  constructor(private readonly authService: AuthService, private readonly router: Router) {
   }
 
   public onAuthModalOpen(): void {
@@ -45,10 +44,16 @@ export class ShellComponent {
   }
 
   public onLogout(): void {
-    this.authService.logout().subscribe({
-      next: () => this.router.navigate(['/']),
+    this.authService.logout().pipe(
+      map(() => getData(this.router.routerState))
+    ).subscribe({
+      next: (data: Data) => {
+        if (data['authOnly']) {
+          this.router.navigate(['/']);
+        }
+      },
       error: () => alert('Error')
-    })
+    });
   }
 
 }

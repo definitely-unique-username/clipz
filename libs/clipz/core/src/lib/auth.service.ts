@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
-import { Auth, createUserWithEmailAndPassword, user, UserCredential, signInWithEmailAndPassword, signOut , updateProfile, fetchSignInMethodsForEmail} from "@angular/fire/auth";
-import { FirebaseUser, User } from "@clipz/util";
+import { Auth, createUserWithEmailAndPassword, user, UserCredential, signInWithEmailAndPassword, signOut, updateProfile, fetchSignInMethodsForEmail } from "@angular/fire/auth";
+import { FirebaseUser, User,  } from "@clipz/util";
 import { from, map, mapTo, Observable, switchMap, switchMapTo } from "rxjs";
 import { UserService } from "./user.service";
 
@@ -57,3 +57,4 @@ export class AuthService {
         return from(fetchSignInMethodsForEmail(this.auth, email));
     }
 }
+
