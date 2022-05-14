@@ -17,9 +17,16 @@ const routes: Routes = [{
                 .then((m: typeof import('@clipz/about')) => m.ClipzAboutModule)
         },
         {
-            path: 'video',
-            loadChildren: () => import('@clipz/video/shell')
-                .then((m: typeof import('@clipz/video/shell')) => m.ClipzVideoFeatureShellModule)
+            path: 'manage',
+            loadChildren: () => import('@clipz/manage')
+                .then((m: typeof import('@clipz/manage')) => m.ClipzManageModule),
+            data: { authOnly: true }
+        },
+        {
+            path: 'upload',
+            loadChildren: () => import('@clipz/upload')
+                .then((m: typeof import('@clipz/upload')) => m.ClipzUploadModule),
+            data: { authOnly: true }
         },
         { path: '**', redirectTo: '' }
     ]

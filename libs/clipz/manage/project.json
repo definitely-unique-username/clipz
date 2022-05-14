@@ -1,0 +1,26 @@
+{
+  "projectType": "library",
+  "root": "libs/clipz/manage",
+  "sourceRoot": "libs/clipz/manage/src",
+  "prefix": "clipz",
+  "targets": {
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/clipz/manage"],
+      "options": {
+        "jestConfig": "libs/clipz/manage/jest.config.js",
+        "passWithNoTests": true
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "libs/clipz/manage/src/**/*.ts",
+          "libs/clipz/manage/src/**/*.html"
+        ]
+      }
+    }
+  },
+  "tags": []
+}

@@ -10,9 +10,8 @@
     "clipz-core": "libs/clipz/core",
     "clipz-e2e": "apps/clipz-e2e",
     "clipz-home": "libs/clipz/home",
+    "clipz-manage": "libs/clipz/manage",
     "clipz-shell": "libs/clipz/shell",
-    "clipz-video-feature-manage": "libs/clipz/video/feature/manage",
-    "clipz-video-feature-shell": "libs/clipz/video/feature/shell",
-    "clipz-video-feature-upload": "libs/clipz/video/feature/upload"
+    "clipz-upload": "libs/clipz/upload"
   }
 }
