@@ -13,7 +13,7 @@ import { devtoolsModules } from './devtools-modules';
     provideAuth(() => getAuth()),
     StoreModule.forRoot({ router: routerReducer }),
     StoreRouterConnectingModule.forRoot(),
-    devtoolsModules
+    devtoolsModules,
   ],
 })
 export class ClipzCoreModule {

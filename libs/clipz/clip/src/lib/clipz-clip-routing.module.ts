@@ -3,6 +3,12 @@ import { RouterModule, Routes } from "@angular/router";
 import { ClipComponent } from "./clip/clip.component";
 
 const routes: Routes = [
+    {
+        path: '',
+        pathMatch: 'full',
+        loadChildren: () => import('@clipz/404')
+            .then((m: typeof import('@clipz/404')) => m.Clipz404Module)
+    },
     { path: ':clipId', component: ClipComponent }
 ];
 

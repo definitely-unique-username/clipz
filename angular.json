@@ -12,6 +12,7 @@
     "clipz-e2e": "apps/clipz-e2e",
     "clipz-home": "libs/clipz/home",
     "clipz-manage": "libs/clipz/manage",
+    "clipz-404": "libs/clipz/404",
     "clipz-shell": "libs/clipz/shell",
     "clipz-upload": "libs/clipz/upload"
   }

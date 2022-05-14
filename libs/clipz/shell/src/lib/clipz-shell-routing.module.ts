@@ -1,6 +1,9 @@
 import { NgModule } from "@angular/core";
+import { AuthGuard, AuthPipeGenerator, redirectUnauthorizedTo } from '@angular/fire/auth-guard';
 import { RouterModule, Routes } from "@angular/router";
 import { ShellComponent } from "./shell/shell.component";
+
+const redirectUnauthorizedToHome: AuthPipeGenerator = () => redirectUnauthorizedTo('/');
 
 const routes: Routes = [{
     path: '',
@@ -19,19 +22,20 @@ const routes: Routes = [{
         {
             path: 'clip',
             loadChildren: () => import('@clipz/clip')
-            .then((m: typeof import('@clipz/clip')) => m.ClipzClipModule)
+                .then((m: typeof import('@clipz/clip')) => m.ClipzClipModule)
         },
         {
             path: 'manage',
+            canActivate: [AuthGuard],
             loadChildren: () => import('@clipz/manage')
                 .then((m: typeof import('@clipz/manage')) => m.ClipzManageModule),
-            data: { authOnly: true }
+            data: { authOnly: true, authGuardPipe: redirectUnauthorizedToHome }
         },
         {
             path: 'upload',
             loadChildren: () => import('@clipz/upload')
                 .then((m: typeof import('@clipz/upload')) => m.ClipzUploadModule),
-            data: { authOnly: true }
+            data: { authOnly: true, authGuardPipe: redirectUnauthorizedToHome }
         },
         { path: '**', redirectTo: '' }
     ]

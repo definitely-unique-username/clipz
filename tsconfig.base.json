@@ -15,6 +15,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@clipz/404": ["libs/clipz/404/src/index.ts"],
       "@clipz/about": ["libs/clipz/about/src/index.ts"],
       "@clipz/auth": ["libs/clipz/auth/src/index.ts"],
       "@clipz/clip": ["libs/clipz/clip/src/index.ts"],
