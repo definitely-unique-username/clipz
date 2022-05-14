@@ -17,6 +17,7 @@
     "paths": {
       "@clipz/about": ["libs/clipz/about/src/index.ts"],
       "@clipz/auth": ["libs/clipz/auth/src/index.ts"],
+      "@clipz/clip": ["libs/clipz/clip/src/index.ts"],
       "@clipz/components/modal": [
         "libs/clipz/common/components/modal/src/index.ts"
       ],
@@ -28,8 +29,7 @@
       "@clipz/manage": ["libs/clipz/manage/src/index.ts"],
       "@clipz/shell": ["libs/clipz/shell/src/index.ts"],
       "@clipz/upload": ["libs/clipz/upload/src/index.ts"],
-      "@clipz/util": ["libs/clipz/common/util/src/index.ts"],
-      "@clipz/video": ["libs/clipz/video/src/index.ts"]
+      "@clipz/util": ["libs/clipz/common/util/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

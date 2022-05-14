@@ -4,6 +4,7 @@
     "clipz": "apps/clipz",
     "clipz-about": "libs/clipz/about",
     "clipz-auth": "libs/clipz/auth",
+    "clipz-clip": "libs/clipz/clip",
     "clipz-common-components-modal": "libs/clipz/common/components/modal",
     "clipz-common-components-tabs": "libs/clipz/common/components/tabs",
     "clipz-common-util": "libs/clipz/common/util",
@@ -12,7 +13,6 @@
     "clipz-home": "libs/clipz/home",
     "clipz-manage": "libs/clipz/manage",
     "clipz-shell": "libs/clipz/shell",
-    "clipz-upload": "libs/clipz/upload",
-    "clipz-video": "libs/clipz/video"
+    "clipz-upload": "libs/clipz/upload"
   }
 }

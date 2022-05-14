@@ -1,12 +1,12 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
-  selector: 'clipz-video',
-  templateUrl: './video.component.html',
-  styleUrls: ['./video.component.scss'],
+  selector: 'clipz-clip',
+  templateUrl: './clip.component.html',
+  styleUrls: ['./clip.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class VideoComponent implements OnInit {
+export class ClipComponent implements OnInit {
 
   constructor() { }
 

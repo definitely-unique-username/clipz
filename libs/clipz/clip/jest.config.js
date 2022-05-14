@@ -1,5 +1,5 @@
 module.exports = {
-  displayName: 'clipz-video',
+  displayName: 'clipz-clip',
   preset: '../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   globals: {
@@ -8,7 +8,7 @@ module.exports = {
       stringifyContentPathRegex: '\\.(html|svg)$',
     },
   },
-  coverageDirectory: '../../../coverage/libs/clipz/video',
+  coverageDirectory: '../../../coverage/libs/clipz/clip',
   transform: {
     '^.+\\.(ts|mjs|js|html)$': 'jest-preset-angular',
   },

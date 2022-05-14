@@ -1,4 +1,8 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Observable } from 'rxjs';
+import { ManageStoreService } from './manage-store.service';
+import { Sort } from './utils';
 
 @Component({
   selector: 'clipz-manage',
@@ -6,11 +10,18 @@ import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
   styleUrls: ['./manage.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ManageComponent implements OnInit {
+export class ManageComponent {
+  public readonly sort$: Observable<Sort> = this.manageStoreService.sort$;
+  public readonly Sort: typeof Sort = Sort;
 
-  constructor() { }
+  constructor(
+    private readonly manageStoreService: ManageStoreService,
+    private readonly route: ActivatedRoute,
+    private readonly router: Router
+  ) { }
 
-  ngOnInit(): void {
+  public onSortChange(e: Event): void {
+    const sort: Sort = (e.target as HTMLSelectElement).value as Sort;
+    this.router.navigate([], { relativeTo: this.route, queryParams: { sort } });
   }
-
 }

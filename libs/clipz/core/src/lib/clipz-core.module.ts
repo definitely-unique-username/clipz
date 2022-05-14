@@ -2,12 +2,18 @@ import { NgModule, Optional, SkipSelf } from '@angular/core';
 import { provideFirebaseApp, getApp } from '@angular/fire/app';
 import { provideAuth, getAuth } from '@angular/fire/auth';
 import { provideFirestore, getFirestore } from '@angular/fire/firestore';
+import { routerReducer, StoreRouterConnectingModule } from '@ngrx/router-store';
+import { StoreModule } from '@ngrx/store';
+import { devtoolsModules } from './devtools-modules';
 
 @NgModule({
   imports: [
     provideFirebaseApp(() => getApp()),
     provideFirestore(() => getFirestore()),
-    provideAuth(() => getAuth())
+    provideAuth(() => getAuth()),
+    StoreModule.forRoot({ router: routerReducer }),
+    StoreRouterConnectingModule.forRoot(),
+    devtoolsModules
   ],
 })
 export class ClipzCoreModule {
