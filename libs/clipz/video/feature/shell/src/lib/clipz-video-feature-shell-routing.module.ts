@@ -18,6 +18,12 @@ const routes: Routes = [
                     .then((m: typeof import('@clipz/video/manage')) => m.ClipzVideoFeatureManageModule),
                 data: { authOnly: true }
             },
+            {
+                path: 'upload',
+                loadChildren: () => import('@clipz/video/upload')
+                    .then((m: typeof import('@clipz/video/upload')) => m.ClipzVideoFeatureUploadModule),
+                data: { authOnly: true }
+            },
             { path: '**', redirectTo: '' }
         ]
     }

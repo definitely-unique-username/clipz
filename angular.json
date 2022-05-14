@@ -12,6 +12,7 @@
     "clipz-home": "libs/clipz/home",
     "clipz-shell": "libs/clipz/shell",
     "clipz-video-feature-manage": "libs/clipz/video/feature/manage",
-    "clipz-video-feature-shell": "libs/clipz/video/feature/shell"
+    "clipz-video-feature-shell": "libs/clipz/video/feature/shell",
+    "clipz-video-feature-upload": "libs/clipz/video/feature/upload"
   }
 }

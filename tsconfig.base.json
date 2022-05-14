@@ -27,8 +27,9 @@
       "@clipz/home": ["libs/clipz/home/src/index.ts"],
       "@clipz/shell": ["libs/clipz/shell/src/index.ts"],
       "@clipz/util": ["libs/clipz/common/util/src/index.ts"],
+      "@clipz/video/manage": ["libs/clipz/video/feature/manage/src/index.ts"],
       "@clipz/video/shell": ["libs/clipz/video/feature/shell/src/index.ts"],
-      "@clipz/video/manage": ["libs/clipz/video/feature/manage/src/index.ts"]
+      "@clipz/video/upload": ["libs/clipz/video/feature/upload/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
