@@ -1,0 +1,26 @@
+{
+  "projectType": "library",
+  "root": "libs/clipz/common/directives/dropzone",
+  "sourceRoot": "libs/clipz/common/directives/dropzone/src",
+  "prefix": "clipz",
+  "targets": {
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/clipz/common/directives/dropzone"],
+      "options": {
+        "jestConfig": "libs/clipz/common/directives/dropzone/jest.config.js",
+        "passWithNoTests": true
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "libs/clipz/common/directives/dropzone/src/**/*.ts",
+          "libs/clipz/common/directives/dropzone/src/**/*.html"
+        ]
+      }
+    }
+  },
+  "tags": []
+}
