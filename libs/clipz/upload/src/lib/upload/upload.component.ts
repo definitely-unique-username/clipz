@@ -2,11 +2,10 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy } from
 import { UploadTask } from '@angular/fire/storage';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { ClipsService, UploadData, UploadSnapshot } from '@clipz/core';
 import { DestroyService } from '@clipz/util';
 import { BehaviorSubject, finalize, Observable, tap } from 'rxjs';
 import { v4 as uuid } from 'uuid';
-import { ClipsService } from '../clips.service';
-import { UploadData, UploadSnapshot } from '../util';
 
 @Component({
   selector: 'clipz-upload',

@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 
 import { ClipsService } from './clips.service';
 
-describe('ClipStorageService', () => {
+describe('ClipsService', () => {
   let service: ClipsService;
 
   beforeEach(() => {

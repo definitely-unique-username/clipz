@@ -7,7 +7,9 @@ import { Clip, UploadData, UploadSnapshot } from './util';
 import { AuthService } from '@clipz/core';
 import { FirebaseUser } from '@clipz/util';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class ClipsService {
   protected readonly backetName: string = 'clips';
   protected readonly collectionName: string = 'clips';
