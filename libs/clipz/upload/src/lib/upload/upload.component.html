@@ -1,42 +1,46 @@
 <!-- Main Content -->
 <section class="container mx-auto my-8 bg-secondary p-6">
     <div class="rounded relative flex flex-col">
-        <div class="font-bold mb-6">Upload Video</div>
+        <div class="font-bold mb-6">Upload Video <span *ngIf="progress$ | async as progress">{{ progress |
+                percent}}</span></div>
 
-        <!-- Upload Dropbox -->
-        <div 
-            clipzDropzone="bg-indigo-400 border0indigo-400 border-solid"
-            class="w-full px-10 py-40 rounded text-center cursor-pointer border border-dashed
-          border-gray-400 transition duration-500 hover:text-white
-          hover:bg-indigo-400 hover:border-indigo-400 hover:border-solid text-xl">
-            <h5>Drop your file here (mp4 only!)</h5>
-        </div>
+        <!-- Form -->
+        <form [formGroup]="form" (ngSubmit)="onSubmit()">
+            <!-- Upload Dropbox -->
+            <ng-container *ngIf="!(fileSelected$ | async); else summaryTemplate" formGroupName="video">
+                <div clipzDropzone="bg-indigo-400 border-indigo-400 border-solid" (dropped)="onFileSelect($event)"
+                    formControlName="file" class="w-full px-10 py-40 rounded text-center cursor-pointer border border-dashed
+                border-gray-400 transition duration-500 hover:text-white
+                hover:bg-indigo-400 hover:border-indigo-400 hover:border-solid text-xl">
+                    <h5>Drop or select your file here (mp4 only!)</h5>
+                </div>
+                <input type="file" class="mt-4" (change)="onFileChange($event)" accept="video/mp4">
+            </ng-container>
 
-        <!-- Video Editor -->
-        <div>
-
-            <!-- Form -->
-            <form>
+            <!-- Video Editor -->
+            <ng-template #summaryTemplate>
                 <!-- Screenshots -->
                 <h2 class="mb-4 text-xl">Select a Thumbnail</h2>
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
-                    <div class="border-8 cursor-pointer border-green-400">
-                        <img src="assets/img/1.jpg">
+                <ng-container formGroupName="summary">
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+                        <div class="border-8 cursor-pointer border-green-400">
+                            <img src="assets/img/1.jpg">
+                        </div>
+                        <div class="border-8 cursor-pointer border-transparent">
+                            <img src="assets/img/2.jpg">
+                        </div>
+                        <div class="border-8 cursor-pointer border-transparent">
+                            <img src="assets/img/3.jpg">
+                        </div>
                     </div>
-                    <div class="border-8 cursor-pointer border-transparent">
-                        <img src="assets/img/2.jpg">
-                    </div>
-                    <div class="border-8 cursor-pointer border-transparent">
-                        <img src="assets/img/3.jpg">
-                    </div>
-                </div>
 
-                <!-- Title -->
-                <div class="mt-4">
-                    <label class="block text-xl mb-4">Title</label>
-                    <input type="text" class="block w-full py-1.5 px-3 text-gray-200 border border-gray-400 transition
-            duration-500 focus:outline-none rounded bg-transparent focus:border-indigo-400">
-                </div>
+                    <!-- Title -->
+                    <div class="mt-4">
+                        <label class="block text-xl mb-4">Title</label>
+                        <input type="text" formControlName="title" class="block w-full py-1.5 px-3 text-gray-200 border border-gray-400 transition
+                    duration-500 focus:outline-none rounded bg-transparent focus:border-indigo-400">
+                    </div>
+                </ng-container>
 
                 <div class="mt-4 text-right">
                     <button type="submit"
@@ -44,7 +48,7 @@
                         Publish
                     </button>
                 </div>
-            </form>
-        </div>
+            </ng-template>
+        </form>
     </div>
 </section>

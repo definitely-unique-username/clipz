@@ -1,4 +1,4 @@
-import { Directive, ElementRef, forwardRef, HostBinding, HostListener, Input, Renderer2 } from '@angular/core';
+import { Directive, ElementRef, EventEmitter, forwardRef, HostBinding, HostListener, Input, Output, Renderer2 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { emptyFn } from '@clipz/util';
 
@@ -14,6 +14,8 @@ import { emptyFn } from '@clipz/util';
 })
 export class DropzoneDirective implements ControlValueAccessor {
   @Input('clipzDropzone') public dragClass: string | null = null;
+
+  @Output() public dropped: EventEmitter<File | null> = new EventEmitter<File | null>();
 
   private onTouch: () => void = emptyFn;
   private onChange: (value: File | null) => void = emptyFn;
@@ -49,11 +51,11 @@ export class DropzoneDirective implements ControlValueAccessor {
     event.preventDefault();
 
     if (!this.disabled) {
-      this.onTouch();
       const file: File | null = event.dataTransfer?.files.item(0) ?? null;
       this.file = file;
       this.onChange(this.file);
-      console.log(this.file);
+      this.onTouch();
+      this.dropped.emit(this.file);
     }
 
     this.removeClasses();

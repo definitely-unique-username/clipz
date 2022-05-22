@@ -8,7 +8,8 @@ import { UserService } from "./user.service";
     providedIn: 'root'
 })
 export class AuthService {
-    public readonly auth$: Observable<boolean> = user(this.auth).pipe(map(Boolean));
+    public readonly user$: Observable<FirebaseUser | null> = user(this.auth);
+    public readonly auth$: Observable<boolean> = this.user$.pipe(map(Boolean));
 
     constructor(
         private readonly auth: Auth,
