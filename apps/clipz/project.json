@@ -14,7 +14,15 @@
         "polyfills": "apps/clipz/src/polyfills.ts",
         "tsConfig": "apps/clipz/tsconfig.app.json",
         "inlineStyleLanguage": "scss",
-        "assets": ["apps/clipz/src/favicon.ico", "apps/clipz/src/assets"],
+        "assets": [
+          "apps/clipz/src/favicon.ico",
+          "apps/clipz/src/assets",
+          {
+            "input": "node_modules/@ffmpeg/core/dist",
+            "output": "node_modules/@ffmpeg/core/dist",
+            "glob": "*"
+          }
+        ],
         "styles": ["apps/clipz/src/styles.scss"],
         "scripts": []
       },
@@ -65,7 +73,13 @@
           "browserTarget": "clipz:build:development"
         }
       },
-      "defaultConfiguration": "development"
+      "defaultConfiguration": "development",
+      "options": {
+        "headers": {
+          "Cross-Origin-Opener-Policy": "same-origin",
+          "Cross-Origin-Embedder-Policy": "require-corp"
+        }
+      }
     },
     "extract-i18n": {
       "executor": "@angular-devkit/build-angular:extract-i18n",

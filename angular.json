@@ -9,6 +9,8 @@
     "clipz-common-components-modal": "libs/clipz/common/components/modal",
     "clipz-common-components-tabs": "libs/clipz/common/components/tabs",
     "clipz-common-directives-dropzone": "libs/clipz/common/directives/dropzone",
+    "clipz-common-pipes-equal": "libs/clipz/common/pipes/equal",
+    "clipz-common-pipes-sanitize": "libs/clipz/common/pipes/sanitize",
     "clipz-common-util": "libs/clipz/common/util",
     "clipz-core": "libs/clipz/core",
     "clipz-e2e": "apps/clipz-e2e",

@@ -2,5 +2,5 @@
 
 <router-outlet></router-outlet>
 
-<clipz-auth-modal *ngIf="!(auth$ | async)" [visible]="authModalVisible$ | async" (modalClose)="onAuthModalClose()"
+<clipz-auth-modal *ngIf="!(auth$ | async)" [visible]="$any(authModalVisible$ | async)" (modalClose)="onAuthModalClose()"
   (register)="onRegister($event)" (login)="onLogin($event)"></clipz-auth-modal>

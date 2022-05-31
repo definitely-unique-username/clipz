@@ -5,3 +5,5 @@ export * from './lib/devtools-modules';
 export * from './lib/router.selectors';
 export * from './lib/clips.service';
 export * from './lib/util';
+export * from './lib/user.service';
+export * from './lib/ffmpeg.service';

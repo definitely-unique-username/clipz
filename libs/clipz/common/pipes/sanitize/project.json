@@ -1,0 +1,26 @@
+{
+  "projectType": "library",
+  "root": "libs/clipz/common/pipes/sanitize",
+  "sourceRoot": "libs/clipz/common/pipes/sanitize/src",
+  "prefix": "clipz",
+  "targets": {
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/clipz/common/pipes/sanitize"],
+      "options": {
+        "jestConfig": "libs/clipz/common/pipes/sanitize/jest.config.js",
+        "passWithNoTests": true
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "libs/clipz/common/pipes/sanitize/src/**/*.ts",
+          "libs/clipz/common/pipes/sanitize/src/**/*.html"
+        ]
+      }
+    }
+  },
+  "tags": []
+}

@@ -10,7 +10,7 @@ import { CoerceBoolean } from '@clipz/util';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AuthModalComponent{
-  @CoerceBoolean() @Input() public visible: boolean | null = false;
+  @CoerceBoolean() @Input() public visible: boolean = false;
 
   @Output() public readonly modalClose: EventEmitter<void> = new EventEmitter<void>();
   @Output() public readonly register: EventEmitter<RegisterData> = new EventEmitter<RegisterData>();

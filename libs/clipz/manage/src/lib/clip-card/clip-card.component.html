@@ -1,0 +1,31 @@
+<div class="mt-6 rounded-tl-2xl rounded-br-2xl shadow-xl bg-secondary flex flex-col justify-start">
+
+    <!-- Image -->
+    <a href="#">
+        <img class="card-img-top rounded-tl-2xl w-full" src="assets/img/1.jpg">
+    </a>
+
+    <!-- Body -->
+    <div class="p-6 text-2xl">
+
+        <!-- Link -->
+        <a href="#" class="font-bold mb-2">
+            {{ clip?.title }}
+        </a>
+        <button (click)="onCopy()" type="button" class="bg-gray-400 text-white px-2 py-1 ml-2 text-sm rounded">
+            Copy Link
+        </button>
+
+    </div>
+
+    <!-- Actions -->
+    <div class="flex text-center text-2xl bg-gray-800 p-2 mt-auto">
+        <button (click)="onEdit()" type="button" class="flex-1 p-2 border-right border-r-2 border-gray-700 transition hover:text-indigo-400">
+            <span class="material-icons text-base">build</span>
+        </button>
+        <button (click)="onDelete()" type="button" href="#" class="flex-1 p-2 rounded-br-2xl transition hover:text-indigo-400">
+            <span class="material-icons text-base">delete</span>
+        </button>
+    </div>
+
+</div>

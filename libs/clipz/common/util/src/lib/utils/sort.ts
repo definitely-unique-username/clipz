@@ -1,5 +1,3 @@
-export const SORT_QUERY_PARAM = 'sort';
-
 export enum Sort {
     ASC = 'asc',
     DESC = 'desc'
