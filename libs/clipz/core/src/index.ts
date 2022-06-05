@@ -7,3 +7,4 @@ export * from './lib/clips.service';
 export * from './lib/util';
 export * from './lib/user.service';
 export * from './lib/ffmpeg.service';
+export * from './lib/screenshots.service';

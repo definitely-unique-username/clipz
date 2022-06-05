@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { UploadTask } from '@angular/fire/storage';
-import { ClipsService, FfmpegService, UploadData, UploadSnapshot } from '@clipz/core';
+import { ClipsService, FfmpegService, ScreenshotsService, SnapshotProgress, UploadData, UploadSnapshot } from '@clipz/core';
 import { ModelStatus } from '@clipz/util';
 import { ComponentStore, tapResponse } from '@ngrx/component-store';
-import { exhaustMap, filter, from, Observable, of, Subject, switchMap, withLatestFrom } from 'rxjs';
+import { combineLatest, exhaustMap, filter, from, Observable, of, Subject, switchMap, withLatestFrom } from 'rxjs';
 import { v4 as uuid } from 'uuid';
 
 interface UploadState {
@@ -11,7 +11,8 @@ interface UploadState {
   progress: number;
   screenshots: string[];
   status: ModelStatus;
-  uploadTask: UploadTask | null;
+  clipUploadTask: UploadTask | null;
+  screenshotUploadTask: UploadTask | null;
 }
 
 const initialState: UploadState = {
@@ -19,13 +20,14 @@ const initialState: UploadState = {
   progress: 0,
   screenshots: [],
   status: ModelStatus.Init,
-  uploadTask: null
+  clipUploadTask: null,
+  screenshotUploadTask: null
 };
 
 @Injectable()
 export class UploadService extends ComponentStore<UploadState> {
   private readonly uploadedSource: Subject<string> = new Subject<string>();
-  
+
   public readonly file$: Observable<File | null> = this.select((state: UploadState) => state.file);
   public readonly fileSelected$: Observable<boolean> = this.select((state: UploadState) => state.file instanceof File);
   public readonly progress$: Observable<number> = this.select((state: UploadState) => state.progress);
@@ -61,32 +63,68 @@ export class UploadService extends ComponentStore<UploadState> {
     )
   );
 
-  private readonly createClip$ = this.effect((data$: Observable<{ title: string; timestamp: number }>) =>
+  private readonly uploadData$ = this.effect((data$: Observable<{ title: string; timestamp: number, screenshotUrl: string }>) =>
     data$.pipe(
       withLatestFrom(this.file$),
-      filter(([, file]: [{ title: string, timestamp: number }, File | null]) => file instanceof File),
-      exhaustMap(([{ timestamp, title }, file]: [{ title: string, timestamp: number }, File | null]) => {
-        const fileName: string = `${uuid()}.mp4`;
-        const { uploadSnapshot$, uploadTask }: UploadData = this.clipsService.createClip(fileName, title, timestamp, file as File);
-        this.onUploadFile(uploadTask);
+      filter(([, file]: [{ title: string, timestamp: number, screenshotUrl: string }, File | null]) => file instanceof File),
+      exhaustMap(([{ timestamp, title, screenshotUrl }, file]: [{ title: string, timestamp: number, screenshotUrl: string }, File | null]) => {
 
-        return uploadSnapshot$;
+        return this.urlToBlob(screenshotUrl).pipe(
+          switchMap((screenshotBlob: Blob) => {
+            const clipFileName: string = `${uuid()}.mp4`;
+            const { uploadSnapshot$: clipUploadSbapshot$, uploadTask: clipUploadTask }: UploadData = this.clipsService.upload(clipFileName, file as File);
+            const screenshotFileName: string = `${uuid()}.png`;
+            const { uploadSnapshot$: screenshotUploadSnapshot$, uploadTask: screenshotUploadTask }: UploadData = this.screenshotsService.upload(screenshotFileName, screenshotBlob)
+            this.onUploadData(clipUploadTask, screenshotUploadTask);
+
+            return combineLatest([
+              clipUploadSbapshot$,
+              screenshotUploadSnapshot$
+            ]).pipe(
+              tapResponse(
+                ([clipSnapshot, screenshotSnapshot]: [UploadSnapshot, UploadSnapshot]) => {
+                  if (
+                    clipSnapshot.state === SnapshotProgress.Success
+                    && screenshotSnapshot.state === SnapshotProgress.Success
+                    && clipSnapshot.url && screenshotSnapshot.url
+                  ) {
+                    this.onUploadDataSuccess({
+                      fileName: clipFileName,
+                      fileUrl: clipSnapshot.url,
+                      title,
+                      imageUrl: screenshotSnapshot.url,
+                      imageName: screenshotFileName,
+                      timestamp,
+                    });
+                  } else {
+                    this.onUploadDataProgress(clipSnapshot.progress, screenshotSnapshot.progress);
+                  }
+                },
+                () => { this.onUploadDataError(); },
+              )
+            );
+          })
+        );
       }),
+
+    )
+  );
+
+  private readonly createClip$ = this.effect((data$: Observable<CreateClipData>) =>
+    data$.pipe(
+      exhaustMap(({ fileName, fileUrl, imageUrl, timestamp, title, imageName }: CreateClipData) =>
+        this.clipsService.createClip(fileName, title, timestamp, fileUrl, imageName, imageUrl)
+      ),
       tapResponse(
-        (snapshot: UploadSnapshot) => { 
-          if (snapshot.uuid) {
-            this.onUploadFileSuccess(snapshot.uuid);
-          } else {
-            this.onUploadFileProgress(snapshot.progress); 
-          }
-        },
-        () => { this.onUploadFileError(); },
+        (clipId: string) => this.onCreateClipSuccess(clipId),
+        () => this.onCreateClipError()
       )
     )
-  )
+  );
 
   constructor(
     private readonly clipsService: ClipsService,
+    private readonly screenshotsService: ScreenshotsService,
     private readonly ffmpeg: FfmpegService
   ) {
     super(initialState);
@@ -103,9 +141,9 @@ export class UploadService extends ComponentStore<UploadState> {
     this.setFile$(file);
   }
 
-  public createClip(title: string, timestamp: number = Date.now()): void {
-    console.log('uploadFile');
-    this.createClip$({ title, timestamp });
+  public createClip(title: string, screenshotUrl: string, timestamp: number = Date.now()): void {
+    console.log('uploadData');
+    this.uploadData$({ title, timestamp, screenshotUrl });
   }
 
   public clearScreenshots(): void {
@@ -113,9 +151,10 @@ export class UploadService extends ComponentStore<UploadState> {
     this.ffmpeg.revokeUrls(screenshots);
   }
 
-  public cancelTask(): void {
-    const task: UploadTask | null = this.get((state: UploadState) => state.uploadTask);
-    task?.cancel();
+  public cancelTasks(): void {
+    const { clipUploadTask, screenshotUploadTask } = this.get((state: UploadState) => ({ clipUploadTask: state.clipUploadTask, screenshotUploadTask: state.screenshotUploadTask }));
+    clipUploadTask?.cancel();
+    screenshotUploadTask?.cancel();
   }
 
   private onInitFfmpegSuccess(): void {
@@ -144,24 +183,55 @@ export class UploadService extends ComponentStore<UploadState> {
     alert('Failed to get screenshots');
   }
 
-  private onUploadFile(uploadTask: UploadTask): void {
-    console.log('onUploadFile');
-    this.patchState({ uploadTask, status: ModelStatus.Uploading });
+  private onUploadData(clipUploadTask: UploadTask, screenshotUploadTask: UploadTask): void {
+    console.log('onUploadData');
+    this.patchState({ clipUploadTask, screenshotUploadTask, status: ModelStatus.Uploading });
   }
 
-  private onUploadFileProgress(progress: number): void {
-    console.log('onUploadFileProgress');
+  private onUploadDataProgress(clipProgress: number, screenshotProgress: number): void {
+    const progress: number = Math.round((clipProgress + screenshotProgress) * 100 / 2) / 100;
+    console.log('onUploadDataProgress', progress, clipProgress, screenshotProgress);
     this.patchState({ progress });
   }
 
-  private onUploadFileSuccess(uuid: string): void {
-    console.log('onUploadFileSuccess');
-    this.patchState({ status: ModelStatus.Success, uploadTask: null });
-    this.uploadedSource.next(uuid);
+  private onUploadDataSuccess(data: CreateClipData): void {
+    console.log('onUploadDataSuccess');
+    this.patchState({ clipUploadTask: null, screenshotUploadTask: null });
+    this.onCreateClip(data);
   }
 
-  private onUploadFileError(): void {
-    this.patchState({ status: ModelStatus.Error, uploadTask: null });
+  private onUploadDataError(): void {
+    debugger
+    this.patchState({ status: ModelStatus.Error, clipUploadTask: null, screenshotUploadTask: null });
     alert('Failed to upload file');
   }
+
+  private onCreateClip(data: CreateClipData): void {
+    console.log('onCreateClip');
+    this.createClip$(data);
+  }
+
+  private onCreateClipSuccess(clipId: string): void {
+    console.log('createClipSuccess');
+    this.patchState({ status: ModelStatus.Success });
+    this.uploadedSource.next(clipId);
+  }
+
+  private onCreateClipError(): void {
+    this.patchState({ status: ModelStatus.Error });
+    alert('Failed to create clip');
+  }
+
+  private urlToBlob(url: string): Observable<Blob> {
+    return from(fetch(url).then(res => res.blob()));
+  }
+}
+
+interface CreateClipData {
+  fileName: string;
+  title: string;
+  timestamp: number;
+  fileUrl: string;
+  imageUrl: string;
+  imageName: string;
 }

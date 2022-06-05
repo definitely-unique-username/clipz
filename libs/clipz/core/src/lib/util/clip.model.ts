@@ -6,4 +6,6 @@ export interface Clip {
     fileName: string;
     url: string;
     timestamp: number;
+    image: string;
+    imageName: string;
 }

@@ -44,7 +44,7 @@ export class ManageComponent implements OnInit {
     const confirmed: boolean = confirm('Are you sure you want to delete this clip?');
 
     if (confirmed) {
-      this.manageStoreService.deleteClip(clip.id, clip.fileName);
+      this.manageStoreService.deleteClip(clip.id, clip.fileName, clip.imageName);
     }
   }
 

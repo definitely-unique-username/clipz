@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
-import { Clip, ClipsService, selectQueryParam } from '@clipz/core';
+import { Clip, ClipsService, ScreenshotsService, selectQueryParam } from '@clipz/core';
 import { isSort, ModelStatus, Sort } from '@clipz/util';
 import { ComponentStore } from '@ngrx/component-store';
 import { createEntityAdapter, EntityState } from '@ngrx/entity';
 import { EntitySelectors, UpdateStr } from '@ngrx/entity/src/models';
 import { Store, select } from '@ngrx/store';
-import { catchError, distinctUntilChanged, EMPTY, exhaustMap, map, mergeMap, Observable, shareReplay, switchMap, tap, withLatestFrom } from 'rxjs';
+import { catchError, distinctUntilChanged, EMPTY, exhaustMap, forkJoin, map, mergeMap, Observable, shareReplay, switchMap, tap, withLatestFrom } from 'rxjs';
 import { SORT_QUERY_PARAM } from './util/sort-query-param';
 
 
@@ -84,13 +84,16 @@ export class ManageStoreService extends ComponentStore<ManageState> {
     )
   );
 
-  public readonly deleteClip$ = this.effect((origin$: Observable<{ id: string, fileName: string }>) =>
+  public readonly deleteClip$ = this.effect((origin$: Observable<{ id: string, fileName: string, screenshotName: string }>) =>
     origin$.pipe(
-      mergeMap(({ id, fileName }) => {
+      mergeMap(({ id, fileName, screenshotName }) => {
         const deletedClip: Clip = this.get().entities[id] as Clip;
         this.onDeleteClip(deletedClip.id);
 
-        return this.clipsService.deleteClip(id, fileName).pipe(
+        return forkJoin([
+          this.clipsService.deleteClip(id, fileName),
+          this.screenshotsService.delete(screenshotName)
+        ]).pipe(
           tap({
             error: () => { this.onDeleteClipError(deletedClip); }
           }),
@@ -101,7 +104,8 @@ export class ManageStoreService extends ComponentStore<ManageState> {
 
   constructor(
     private readonly store: Store,
-    private readonly clipsService: ClipsService
+    private readonly clipsService: ClipsService,
+    private readonly screenshotsService: ScreenshotsService
   ) {
     super(initialState)
     this.state$.subscribe(console.log);
@@ -123,8 +127,8 @@ export class ManageStoreService extends ComponentStore<ManageState> {
     this.updateClip$({ id, changes });
   }
 
-  public deleteClip(id: string, fileName: string): void {
-    this.deleteClip$({ id, fileName });
+  public deleteClip(id: string, fileName: string, screenshotName: string): void {
+    this.deleteClip$({ id, fileName, screenshotName });
   }
 
   public reset(): void {

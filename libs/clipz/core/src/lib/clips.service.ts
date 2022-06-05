@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { DocumentReference, Firestore, where, getDocs, query, QuerySnapshot, QueryDocumentSnapshot, doc, updateDoc, getDoc, DocumentSnapshot, deleteDoc, orderBy } from '@angular/fire/firestore';
-import { Storage, getDownloadURL, StorageReference, deleteObject } from '@angular/fire/storage';
+import { Storage, StorageReference, deleteObject } from '@angular/fire/storage';
 import { collection, CollectionReference, addDoc } from '@angular/fire/firestore';
-import { first, from, map, Observable, of, switchMap, withLatestFrom } from 'rxjs';
-import { Clip, UploadData, UploadSnapshot } from './util';
+import { first, from, map, Observable, switchMap } from 'rxjs';
+import { Clip } from './util';
 import { AuthService } from './auth.service';
 import { FirebaseUser, Sort } from '@clipz/util';
 import { StorageEntity } from './storage-entity';
@@ -28,33 +28,23 @@ export class ClipsService extends StorageEntity {
     super(storage);
   }
 
-  public createClip(fileName: string, title: string, timestamp: number, file: File): UploadData {
-    const storageRef: StorageReference = this.storageRef(fileName);
-    const uploadData: UploadData = super.upload(fileName, file);
-
-    return {
-      ...uploadData,
-      uploadSnapshot$: uploadData.uploadSnapshot$.pipe(
-        withLatestFrom(this.authService.user$.pipe(first(Boolean))),
-        switchMap(([snapshot, user]: [UploadSnapshot, FirebaseUser]) => {
-          return snapshot.state === 'success'
-            ? from(getDownloadURL(storageRef)).pipe(
-              switchMap((url: string) => {
-                return from(addDoc(this.collection, {
-                  uid: user.uid,
-                  displayName: `${user.displayName}`,
-                  title,
-                  fileName,
-                  url,
-                  timestamp
-                } as Clip));
-              }),
-              map((docRef: DocumentReference) => ({ ...snapshot, uuid: docRef.id }))
-            )
-            : of(snapshot);
-        })
-      )
-    }
+  public createClip(fileName: string, title: string, timestamp: number, fileUrl: string, imageName: string, imageUrl: string): Observable<string> {
+    return this.authService.user$.pipe(
+      first(Boolean),
+      switchMap((user: FirebaseUser) => {
+        return from(addDoc(this.collection, {
+          uid: user.uid,
+          displayName: `${user.displayName}`,
+          title,
+          fileName,
+          url: fileUrl,
+          timestamp,
+          image: imageUrl,
+          imageName
+        } as Clip))
+      }),
+      map((docRef: DocumentReference) => docRef.id)
+    );
   }
 
   public getUserClips(sort: Sort = Sort.DESC): Observable<Clip[]> {

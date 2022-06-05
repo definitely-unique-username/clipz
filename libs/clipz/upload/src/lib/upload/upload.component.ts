@@ -1,8 +1,8 @@
-import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, NgZone, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { DestroyService } from '@clipz/util';
-import { Observable, takeUntil } from 'rxjs';
+import { delay, Observable, takeUntil } from 'rxjs';
 import { UploadService } from '../upload.service';
 
 @Component({
@@ -15,7 +15,7 @@ import { UploadService } from '../upload.service';
 export class UploadComponent implements OnInit, OnDestroy {
   public readonly file$: Observable<File | null> = this.uploadService.file$;
   public readonly fileSelected$: Observable<boolean> = this.uploadService.fileSelected$;
-  public readonly progress$: Observable<number> = this.uploadService.progress$;
+  public readonly progress$: Observable<number> = this.uploadService.progress$.pipe(delay(0));
   public readonly form: FormGroup = new FormGroup({
     video: new FormGroup({
       file: new FormControl(null, [Validators.required])
@@ -32,14 +32,17 @@ export class UploadComponent implements OnInit, OnDestroy {
   constructor(
     private readonly router: Router,
     private readonly uploadService: UploadService,
-    private readonly destroy$: DestroyService
+    private readonly destroy$: DestroyService,
+    private ngZone: NgZone
   ) {
     this.uploadService.initFfmpeg();
   }
 
   public ngOnInit(): void {
     this.uploadService.uploaded$.pipe(takeUntil(this.destroy$)).subscribe((uuid: string) => {
-      this.router.navigate(['/clip', uuid]);
+      this.ngZone.run(() => {
+        this.router.navigate(['/clip', uuid]);
+      });
     });
   }
 
@@ -50,7 +53,8 @@ export class UploadComponent implements OnInit, OnDestroy {
   public onSubmit(): void {
     if (this.form.valid) {
       const title: string = this.form.value.summary.title;
-      this.uploadService.createClip(title);
+      const screenshotUrl: string = this.form.value.summary.image;
+      this.uploadService.createClip(title, screenshotUrl);
     }
   }
 
