@@ -1,8 +1,9 @@
-import { SanitizeResourceUrlPipe } from './sanitize-resource-url.pipe';
+import { DomSanitizer } from '@angular/platform-browser';
+import { SafeUrlPipe } from './sanitize-resource-url.pipe';
 
-// describe('SanitizeResourceUrlPipe', () => {
-//   it('create an instance', () => {
-//     const pipe = new SanitizeResourceUrlPipe();
-//     expect(pipe).toBeTruthy();
-//   });
-// });
+describe('SanitizeResourceUrlPipe', () => {
+  it('create an SafeUrlPipe', () => {
+    const pipe = new SafeUrlPipe({} as DomSanitizer);
+    expect(pipe).toBeTruthy();
+  });
+});

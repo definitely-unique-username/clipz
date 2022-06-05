@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
-import { SanitizeResourceUrlPipe } from './sanitize-resource-url.pipe';
+import { SafeUrlPipe } from './sanitize-resource-url.pipe';
 
 @NgModule({
-  declarations: [SanitizeResourceUrlPipe],
-  exports: [SanitizeResourceUrlPipe]
+  declarations: [SafeUrlPipe],
+  exports: [SafeUrlPipe]
 })
 export class SanitizePipeModule { }

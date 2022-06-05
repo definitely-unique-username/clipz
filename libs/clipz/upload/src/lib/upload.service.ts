@@ -118,11 +118,6 @@ export class UploadService extends ComponentStore<UploadState> {
     task?.cancel();
   }
 
-  public destroy(): void {
-    this.clearScreenshots();
-    this.cancelTask();
-  }
-
   private onInitFfmpegSuccess(): void {
     console.log('onInitFfmpegSuccess');
     this.patchState({ status: ModelStatus.Success });

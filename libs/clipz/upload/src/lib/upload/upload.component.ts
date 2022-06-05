@@ -44,7 +44,7 @@ export class UploadComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy(): void {
-    this.uploadService.destroy();
+    this.uploadService.clearScreenshots();
   }
 
   public onSubmit(): void {
