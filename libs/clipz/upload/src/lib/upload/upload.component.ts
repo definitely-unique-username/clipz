@@ -48,10 +48,10 @@ export class UploadComponent implements OnInit, OnDestroy {
   }
 
   public onSubmit(): void {
-    // if (this.form.valid) {
+    if (this.form.valid) {
       const title: string = this.form.value.summary.title;
-      this.uploadService.uploadFile(title);
-    // }
+      this.uploadService.createClip(title);
+    }
   }
 
   public onFileSelect(file: File | null): void {

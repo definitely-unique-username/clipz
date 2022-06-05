@@ -24,13 +24,12 @@
                     <!-- Screenshots -->
                     <h2 class="mb-4 text-xl">Select a Thumbnail</h2>
                     <ng-container formGroupName="summary">
-                        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
-                            <div *ngFor="let screenshot of screenshots$ | async"
-                                class="border-8 cursor-pointer border-green-400">
-                                <img class="m-auto" [src]="screenshot | safeUrl">
-                            </div>
-                        </div>
-
+                        <clipz-screenshot-select 
+                            formControlName="image"
+                            *ngIf="screenshots$ | async as screenshots" 
+                            [screenshoots]="screenshots"
+                        >
+                        </clipz-screenshot-select>
                         <!-- Title -->
                         <div class="mt-4">
                             <label class="block text-xl mb-4">Title</label>

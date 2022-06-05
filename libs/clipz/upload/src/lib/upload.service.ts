@@ -61,13 +61,13 @@ export class UploadService extends ComponentStore<UploadState> {
     )
   );
 
-  private readonly uploadFile$ = this.effect((data$: Observable<{ title: string; timestamp: number }>) =>
+  private readonly createClip$ = this.effect((data$: Observable<{ title: string; timestamp: number }>) =>
     data$.pipe(
       withLatestFrom(this.file$),
       filter(([, file]: [{ title: string, timestamp: number }, File | null]) => file instanceof File),
       exhaustMap(([{ timestamp, title }, file]: [{ title: string, timestamp: number }, File | null]) => {
         const fileName: string = `${uuid()}.mp4`;
-        const { uploadSnapshot$, uploadTask }: UploadData = this.clipsService.upload(fileName, title, timestamp, file as File);
+        const { uploadSnapshot$, uploadTask }: UploadData = this.clipsService.createClip(fileName, title, timestamp, file as File);
         this.onUploadFile(uploadTask);
 
         return uploadSnapshot$;
@@ -103,9 +103,9 @@ export class UploadService extends ComponentStore<UploadState> {
     this.setFile$(file);
   }
 
-  public uploadFile(title: string, timestamp: number = Date.now()): void {
+  public createClip(title: string, timestamp: number = Date.now()): void {
     console.log('uploadFile');
-    this.uploadFile$({ title, timestamp });
+    this.createClip$({ title, timestamp });
   }
 
   public clearScreenshots(): void {

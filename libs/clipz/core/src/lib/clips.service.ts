@@ -1,16 +1,17 @@
 import { Injectable } from '@angular/core';
 import { DocumentReference, Firestore, where, getDocs, query, QuerySnapshot, QueryDocumentSnapshot, doc, updateDoc, getDoc, DocumentSnapshot, deleteDoc, orderBy } from '@angular/fire/firestore';
-import { Storage, ref, UploadTask, uploadBytesResumable, UploadTaskSnapshot, getDownloadURL, StorageReference, deleteObject } from '@angular/fire/storage';
+import { Storage, getDownloadURL, StorageReference, deleteObject } from '@angular/fire/storage';
 import { collection, CollectionReference, addDoc } from '@angular/fire/firestore';
-import { first, from, map, Observable, of, Subscriber, switchMap, withLatestFrom } from 'rxjs';
+import { first, from, map, Observable, of, switchMap, withLatestFrom } from 'rxjs';
 import { Clip, UploadData, UploadSnapshot } from './util';
 import { AuthService } from './auth.service';
 import { FirebaseUser, Sort } from '@clipz/util';
+import { StorageEntity } from './storage-entity';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ClipsService {
+export class ClipsService extends StorageEntity {
   protected readonly backetName: string = 'clips';
   protected readonly collectionName: string = 'clips';
   protected readonly collection: CollectionReference<Clip> = collection(
@@ -20,23 +21,39 @@ export class ClipsService {
 
   constructor(
     private readonly firestore: Firestore,
-    private readonly storage: Storage,
+    storage: Storage,
     private readonly authService: AuthService,
     private readonly auth: AuthService
   ) {
+    super(storage);
   }
 
-  public upload(fileName: string, title: string, timestamp: number, file: File): UploadData {
+  public createClip(fileName: string, title: string, timestamp: number, file: File): UploadData {
     const storageRef: StorageReference = this.storageRef(fileName);
-    const uploadTask: UploadTask = uploadBytesResumable(
-      storageRef,
-      new Blob([file], { type: file.type }),
-      { contentType: file.type }
-    );
+    const uploadData: UploadData = super.upload(fileName, file);
 
     return {
-      uploadTask,
-      uploadSnapshot$: this.getUploadSnapshot(uploadTask, storageRef, title, timestamp, fileName)
+      ...uploadData,
+      uploadSnapshot$: uploadData.uploadSnapshot$.pipe(
+        withLatestFrom(this.authService.user$.pipe(first(Boolean))),
+        switchMap(([snapshot, user]: [UploadSnapshot, FirebaseUser]) => {
+          return snapshot.state === 'success'
+            ? from(getDownloadURL(storageRef)).pipe(
+              switchMap((url: string) => {
+                return from(addDoc(this.collection, {
+                  uid: user.uid,
+                  displayName: `${user.displayName}`,
+                  title,
+                  fileName,
+                  url,
+                  timestamp
+                } as Clip));
+              }),
+              map((docRef: DocumentReference) => ({ ...snapshot, uuid: docRef.id }))
+            )
+            : of(snapshot);
+        })
+      )
     }
   }
 
@@ -74,60 +91,6 @@ export class ClipsService {
     return from(deleteDoc(docRef)).pipe(
       switchMap(() => from(deleteObject(storageRef)))
     );
-  }
-
-  private getUploadSnapshot(uploadTask: UploadTask, storageRef: StorageReference, title: string, timestamp: number, fileName: string): Observable<UploadSnapshot> {
-    return new Observable((subscriber: Subscriber<UploadSnapshot>) => {
-      let snapshotCache: UploadSnapshot | null = null;
-      uploadTask.on(
-        'state_changed',
-        (snapshot: UploadTaskSnapshot) => {
-          snapshotCache = {
-            ...snapshot,
-            progress: (snapshot.bytesTransferred / snapshot.totalBytes),
-          };
-          subscriber.next(snapshotCache);
-        },
-        (error: Error) => {
-          subscriber.error(error);
-        },
-        () => {
-          if (snapshotCache) {
-            snapshotCache = { ...snapshotCache, state: 'success', progress: 1 };
-            subscriber.next(snapshotCache);
-          }
-          subscriber.complete();
-        }
-      );
-    })
-      .pipe(
-        withLatestFrom(this.authService.user$.pipe(first(Boolean))),
-        switchMap(([snapshot, user]: [UploadSnapshot, FirebaseUser]) => {
-          return snapshot.state === 'success'
-            ? from(getDownloadURL(storageRef)).pipe(
-              switchMap((url: string) => {
-                return from(addDoc(this.collection, {
-                  uid: user.uid,
-                  displayName: `${user.displayName}`,
-                  title,
-                  fileName,
-                  url,
-                  timestamp
-                } as Clip));
-              }),
-              map((docRef: DocumentReference) => ({ ...snapshot, uuid: docRef.id }))
-            )
-            : of(snapshot);
-        })
-      );
-  }
-
-  private filePath(fileName: string): string {
-    return `${this.backetName}/${fileName}`;
-  }
-
-  private storageRef(fileName: string): StorageReference {
-    return ref(this.storage, this.filePath(fileName));
   }
 
   private docRef(id: string): DocumentReference<Clip> {
