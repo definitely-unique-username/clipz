@@ -5,3 +5,4 @@ export * from './get-data';
 export * from './empty-fn';
 export * from './model-staus.enum';
 export * from './sort';
+export * from './default-page-size';

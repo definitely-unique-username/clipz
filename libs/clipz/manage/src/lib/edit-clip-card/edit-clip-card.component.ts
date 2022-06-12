@@ -2,12 +2,12 @@ import { Component, ChangeDetectionStrategy, Output, Input, EventEmitter } from 
 import { Clip } from '@clipz/core';
 
 @Component({
-  selector: 'clipz-clip-card',
-  templateUrl: './clip-card.component.html',
-  styleUrls: ['./clip-card.component.scss'],
+  selector: 'edit-clip-card',
+  templateUrl: './edit-clip-card.component.html',
+  styleUrls: ['./edit-clip-card.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ClipCardComponent {
+export class EditClipCardComponent {
   @Input() public clip: Clip | null = null;
 
   @Output() public edit: EventEmitter<void> = new EventEmitter<void>();

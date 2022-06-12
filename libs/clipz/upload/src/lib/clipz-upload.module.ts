@@ -7,6 +7,7 @@ import { CommonModule } from '@angular/common';
 import { EqualPipeModule } from '@clipz/pipes/equal';
 import { SanitizePipeModule } from '@clipz/pipes/sanitize';
 import { ScreenshotSelectComponent } from './screenshot-select/screenshot-select.component';
+import { ClipzSpinnerModule } from '@clipz/components/spinner';
 
 @NgModule({
   imports: [
@@ -15,7 +16,8 @@ import { ScreenshotSelectComponent } from './screenshot-select/screenshot-select
     ClipzDropzoneModule,
     ReactiveFormsModule,
     EqualPipeModule,
-    SanitizePipeModule
+    SanitizePipeModule,
+    ClipzSpinnerModule
   ],
   declarations: [UploadComponent, ScreenshotSelectComponent],
 })

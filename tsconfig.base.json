@@ -19,8 +19,14 @@
       "@clipz/about": ["libs/clipz/about/src/index.ts"],
       "@clipz/auth": ["libs/clipz/auth/src/index.ts"],
       "@clipz/clip": ["libs/clipz/clip/src/index.ts"],
+      "@clipz/components/clip-card": [
+        "libs/clipz/common/components/clip-card/src/index.ts"
+      ],
       "@clipz/components/modal": [
         "libs/clipz/common/components/modal/src/index.ts"
+      ],
+      "@clipz/components/spinner": [
+        "libs/clipz/common/components/spinner/src/index.ts"
       ],
       "@clipz/components/tabs": [
         "libs/clipz/common/components/tabs/src/index.ts"
@@ -28,6 +34,9 @@
       "@clipz/core": ["libs/clipz/core/src/index.ts"],
       "@clipz/directives/dropzone": [
         "libs/clipz/common/directives/dropzone/src/index.ts"
+      ],
+      "@clipz/directives/intersaction-observer": [
+        "libs/clipz/common/directives/observer/src/index.ts"
       ],
       "@clipz/home": ["libs/clipz/home/src/index.ts"],
       "@clipz/manage": ["libs/clipz/manage/src/index.ts"],

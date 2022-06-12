@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Clip, ClipsService, ScreenshotsService, selectQueryParam } from '@clipz/core';
 import { isSort, ModelStatus, Sort } from '@clipz/util';
-import { ComponentStore } from '@ngrx/component-store';
+import { ComponentStore, tapResponse } from '@ngrx/component-store';
 import { createEntityAdapter, EntityState } from '@ngrx/entity';
 import { EntitySelectors, UpdateStr } from '@ngrx/entity/src/models';
 import { Store, select } from '@ngrx/store';
-import { catchError, distinctUntilChanged, EMPTY, exhaustMap, forkJoin, map, mergeMap, Observable, shareReplay, switchMap, tap, withLatestFrom } from 'rxjs';
+import { distinctUntilChanged, exhaustMap, forkJoin, map, mergeMap, Observable, shareReplay, switchMap, tap, withLatestFrom } from 'rxjs';
 import { SORT_QUERY_PARAM } from './util/sort-query-param';
 
 
@@ -40,22 +40,21 @@ export class ManageStoreService extends ComponentStore<ManageState> {
   }).pipe(shareReplay({ bufferSize: 1, refCount: true }));
 
   public readonly requestClips$ = this.effect((origin$: Observable<void>) =>
-  origin$.pipe(
-    withLatestFrom(this.sort$),
-    switchMap(([, sort]: [void, Sort]) => {
-      console.log('requestClips$', sort, this.get().sort);
-      this.patchState((state: ManageState) => ({
-        status: state.status === ModelStatus.Init ? ModelStatus.Init : ModelStatus.Pending
-      }));
+    origin$.pipe(
+      withLatestFrom(this.sort$),
+      switchMap(([, sort]: [void, Sort]) => {
+        console.log('requestClips$', sort, this.get().sort);
+        this.patchState((state: ManageState) => ({
+          status: state.status === ModelStatus.Init ? ModelStatus.Init : ModelStatus.Pending
+        }));
 
-      return this.clipsService.getUserClips(sort);
-    }),
-    tap({
-      next: (clips: Clip[]) => { console.log('success', clips); this.onGetUserClipsSuccess(clips); },
-      error: () => { this.onGetUserClipsError(); }
-    }),
-    catchError(() => EMPTY)
-  ));
+        return this.clipsService.getUserClips(sort);
+      }),
+      tapResponse(
+        (clips: Clip[]) => { console.log('success', clips); this.onGetUserClipsSuccess(clips); },
+        () => { this.onGetUserClipsError(); }
+      )
+    ));
 
   public readonly sortChange$ = this.effect(() =>
     this.store.pipe(
@@ -74,11 +73,10 @@ export class ManageStoreService extends ComponentStore<ManageState> {
       exhaustMap(({ id, changes }) => {
         this.patchState({ status: ModelStatus.Pending });
         return this.clipsService.updateClip(id, changes).pipe(
-          tap({
-            next: (clip: Clip) => { this.onUpdateUserClipSuccess(clip); },
-            error: () => { this.onUpdateUserClipError(); }
-          }),
-          catchError(() => EMPTY)
+          tapResponse(
+            (clip: Clip) => { this.onUpdateUserClipSuccess(clip); },
+            () => { this.onUpdateUserClipError(); }
+          )
         );
       })
     )
@@ -94,10 +92,10 @@ export class ManageStoreService extends ComponentStore<ManageState> {
           this.clipsService.deleteClip(id, fileName),
           this.screenshotsService.delete(screenshotName)
         ]).pipe(
-          tap({
-            error: () => { this.onDeleteClipError(deletedClip); }
-          }),
-          catchError(() => EMPTY)
+          tapResponse(
+            () => { },
+            () => { this.onDeleteClipError(deletedClip); }
+          )
         );
       })
     ));

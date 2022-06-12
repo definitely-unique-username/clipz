@@ -1,0 +1,26 @@
+{
+  "projectType": "library",
+  "root": "libs/clipz/common/components/spinner",
+  "sourceRoot": "libs/clipz/common/components/spinner/src",
+  "prefix": "clipz",
+  "targets": {
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/clipz/common/components/spinner"],
+      "options": {
+        "jestConfig": "libs/clipz/common/components/spinner/jest.config.js",
+        "passWithNoTests": true
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "libs/clipz/common/components/spinner/src/**/*.ts",
+          "libs/clipz/common/components/spinner/src/**/*.html"
+        ]
+      }
+    }
+  },
+  "tags": []
+}

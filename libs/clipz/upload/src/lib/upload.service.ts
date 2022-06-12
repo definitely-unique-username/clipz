@@ -201,7 +201,6 @@ export class UploadService extends ComponentStore<UploadState> {
   }
 
   private onUploadDataError(): void {
-    debugger
     this.patchState({ status: ModelStatus.Error, clipUploadTask: null, screenshotUploadTask: null });
     alert('Failed to upload file');
   }
