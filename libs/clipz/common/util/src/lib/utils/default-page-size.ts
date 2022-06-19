@@ -1,1 +1,1 @@
-export const DEFAULT_PAGE_SIZE: number = 9;
+export const DEFAULT_PAGE_SIZE = 9;

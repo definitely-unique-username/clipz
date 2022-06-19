@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BaseClipState, BaseClipStoreService, Clip, ClipsService, ScreenshotsService, selectQueryParam } from '@clipz/core';
-import { isSort, ModelStatus, Sort } from '@clipz/util';
+import { emptyFn, isSort, ModelStatus, Sort } from '@clipz/util';
 import { tapResponse } from '@ngrx/component-store';
 import { UpdateStr } from '@ngrx/entity/src/models';
 import { Store, select } from '@ngrx/store';
@@ -23,7 +23,6 @@ export class ManageStoreService extends BaseClipStoreService<ManageState> {
     origin$.pipe(
       withLatestFrom(this.sort$),
       switchMap(([, sort]: [void, Sort]) => {
-        console.log('requestClips$', sort, this.get().sort);
         this.patchState((state: ManageState) => ({
           status: state.status === ModelStatus.Init ? ModelStatus.Init : ModelStatus.Pending
         }));
@@ -31,7 +30,7 @@ export class ManageStoreService extends BaseClipStoreService<ManageState> {
         return this.clipsService.getUserClips(sort);
       }),
       tapResponse(
-        (clips: Clip[]) => { console.log('success', clips); this.onGetClipsSuccess(clips); },
+        (clips: Clip[]) => { this.onGetClipsSuccess(clips); },
         () => { this.onGetClipsError(); }
       )
     ));
@@ -73,7 +72,7 @@ export class ManageStoreService extends BaseClipStoreService<ManageState> {
           this.screenshotsService.delete(screenshotName)
         ]).pipe(
           tapResponse(
-            () => { },
+            emptyFn,
             () => { this.onDeleteClipError(deletedClip); }
           )
         );
@@ -86,7 +85,6 @@ export class ManageStoreService extends BaseClipStoreService<ManageState> {
     private readonly screenshotsService: ScreenshotsService
   ) {
     super()
-    this.state$.subscribe(console.log);
   }
 
   public getInitialState(): ManageState {

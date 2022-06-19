@@ -17,7 +17,7 @@ export class RegisterFormComponent implements OnChanges {
   @Input() public password: string | null = null;
   @Input() public confirmPassword: string | null = null;
   @Input() public phone: string | null = null;
-  @Input() public disabled: boolean = false;
+  @Input() public disabled = false;
 
   @Output() public submitted: EventEmitter<RegisterData> = new EventEmitter<RegisterData>();
 

@@ -2,7 +2,7 @@ import { Component, ChangeDetectionStrategy, Output, Input, EventEmitter } from 
 import { Clip } from '@clipz/core';
 
 @Component({
-  selector: 'edit-clip-card',
+  selector: 'clipz-edit-clip-card',
   templateUrl: './edit-clip-card.component.html',
   styleUrls: ['./edit-clip-card.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush

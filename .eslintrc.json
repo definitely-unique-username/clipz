@@ -19,7 +19,7 @@
             ]
           }
         ],
-        "no-inferrable-types": false
+        "no-inferrable-types": 0
       }
     },
     {

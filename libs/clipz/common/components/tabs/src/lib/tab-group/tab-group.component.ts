@@ -10,7 +10,7 @@ import { TabComponent } from '../tab/tab.component';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TabGroupComponent implements OnChanges, AfterContentInit {
-  @Input() public selectedTabIndex: number = 0;
+  @Input() public selectedTabIndex = 0;
 
   @Output() public selectedTabIndexChange: EventEmitter<number> = new EventEmitter<number>();
 

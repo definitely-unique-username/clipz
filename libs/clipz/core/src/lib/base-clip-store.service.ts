@@ -1,9 +1,9 @@
-import { Clip } from "@clipz/core";
 import { ModelStatus, Sort } from "@clipz/util";
 import { ComponentStore } from "@ngrx/component-store";
 import { createEntityAdapter, EntityAdapter, EntityState } from "@ngrx/entity";
 import { EntitySelectors } from "@ngrx/entity/src/models";
 import { map, Observable } from 'rxjs';
+import { Clip } from "./util";
 
 export interface BaseClipState extends EntityState<Clip> {
     sort: Sort;

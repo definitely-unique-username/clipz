@@ -2,7 +2,7 @@ import { DOCUMENT } from '@angular/common';
 import { Component, ChangeDetectionStrategy, Input, Output, EventEmitter, SimpleChanges, ElementRef, Inject, OnInit, OnDestroy } from '@angular/core';
 import { CoerceBoolean } from '@clipz/util';
 
-let id: number = 0;
+let id = 0;
 
 @Component({
   selector: 'clipz-modal',
@@ -12,7 +12,7 @@ let id: number = 0;
 })
 export class ModalComponent implements OnInit, OnDestroy {
   @CoerceBoolean() @Input() public visible: boolean | null = false;
-  @CoerceBoolean() @Input() public closeOnBackdropClick: boolean = true;
+  @CoerceBoolean() @Input() public closeOnBackdropClick = true;
 
   @Output() public readonly modalClose: EventEmitter<void> = new EventEmitter<void>();
   @Output() public readonly backdropClick: EventEmitter<void> = new EventEmitter<void>();

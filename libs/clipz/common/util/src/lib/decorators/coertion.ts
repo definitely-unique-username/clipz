@@ -3,7 +3,7 @@ import { coerceBooleanProperty } from "@angular/cdk/coercion";
 export function Coerce<T>(coerceFn: (value: unknown) => T): PropertyDecorator {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return (target: any, propertyKey: string | symbol): void => {
-        const symbol: symbol = Symbol();
+        const symbol = Symbol();
 
         Object.defineProperty(target, propertyKey, {
             get: (): T => {

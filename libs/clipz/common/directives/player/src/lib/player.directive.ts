@@ -5,6 +5,7 @@ import videojs, { VideoJsPlayer } from 'video.js';
   selector: 'video[clipzPlayer]',
 })
 export class PlayerDirective implements OnChanges, AfterViewInit {
+  // eslint-disable-next-line @angular-eslint/no-input-rename
   @Input('clipzPlayer') public source: string | null = null;
 
   public player: VideoJsPlayer | null = null;

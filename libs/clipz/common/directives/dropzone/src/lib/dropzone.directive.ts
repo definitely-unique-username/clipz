@@ -21,7 +21,7 @@ export class DropzoneDirective implements ControlValueAccessor {
   private onChange: (value: File | null) => void = emptyFn;
 
   @HostBinding('class.disabled')
-  private disabled: boolean = false;
+  private disabled = false;
 
   private file: File | null = null;
 

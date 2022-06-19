@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { DocumentReference, Firestore, where, getDocs, query, QuerySnapshot, QueryDocumentSnapshot, doc, updateDoc, getDoc, DocumentSnapshot, deleteDoc, orderBy, limit, startAfter, Query, DocumentData, documentId } from '@angular/fire/firestore';
+import { DocumentReference, Firestore, where, getDocs, query, QuerySnapshot, QueryDocumentSnapshot, doc, updateDoc, getDoc, DocumentSnapshot, deleteDoc, orderBy, limit, startAfter, Query, documentId } from '@angular/fire/firestore';
 import { Storage, StorageReference, deleteObject } from '@angular/fire/storage';
 import { collection, CollectionReference, addDoc } from '@angular/fire/firestore';
 import { first, from, map, Observable, switchMap } from 'rxjs';

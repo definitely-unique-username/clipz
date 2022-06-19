@@ -1,12 +1,12 @@
 import { Directive, ElementRef, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
 
 @Directive({
-  selector: '[intersaction]'
+  selector: '[clipzIntersaction]'
 })
 export class IntersactionObserverDirective implements OnInit, OnDestroy {
   private observer: IntersectionObserver | null = null;
 
-  @Output() public intersaction: EventEmitter<void> = new EventEmitter<void>();
+  @Output('clipzIntersaction') public intersaction: EventEmitter<void> = new EventEmitter<void>();
 
   constructor(private elRef: ElementRef) { }
 

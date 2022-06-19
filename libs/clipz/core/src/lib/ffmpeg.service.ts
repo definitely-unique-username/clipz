@@ -7,12 +7,10 @@ import { BehaviorSubject, first, from, Observable, switchMap, map } from 'rxjs';
 })
 export class FfmpegService {
   private readonly initSource: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-  private loading: boolean = false;
+  private loading = false;
   private readonly ffmpeg: FFmpeg = createFFmpeg({ log: true });
 
   public readonly init$: Observable<boolean> = this.initSource.asObservable();
-
-  constructor() { }
 
   public async initFFmpeg(): Promise<void> {
     if (!this.initSource.value && !this.loading) {

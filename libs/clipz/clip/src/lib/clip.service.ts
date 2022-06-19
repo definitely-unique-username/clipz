@@ -54,7 +54,7 @@ export class ClipService extends BaseClipStoreService<ClipState> {
       withLatestFrom(this.id$.pipe(filter(Boolean)), this.sort$),
       switchMap(([, clipId, sort]: [void, string, Sort]) => {
         this.onGetClips();
-        console.log('GET')
+
         return forkJoin([
           this.clipsService.getClip(clipId),
           this.clipsService.getClips(null, 4, sort)
@@ -66,7 +66,7 @@ export class ClipService extends BaseClipStoreService<ClipState> {
       }
       ),
       tapResponse(
-        (clips: Clip[]) => { console.log('SS', clips); this.onGetClipsSuccess(clips) },
+        (clips: Clip[]) => { this.onGetClipsSuccess(clips) },
         (e: unknown) => {
           console.error(e);
           this.onGetClipsError();
@@ -80,12 +80,10 @@ export class ClipService extends BaseClipStoreService<ClipState> {
     private readonly store: Store
   ) {
     super()
-    this.state$.subscribe(console.log);
   }
 
   protected onGetClipsSuccess(clips: Clip[]): void {
     this.setState((state: ClipState) => {
-      console.log(' ssu', state, this.adapter.setAll(clips, state))
       return {
         ...this.adapter.setAll(clips, state),
         status: ModelStatus.Success

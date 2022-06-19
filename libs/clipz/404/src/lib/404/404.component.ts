@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
   selector: 'clipz-404',
@@ -6,11 +6,5 @@ import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
   styleUrls: ['./404.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class Clipz404Component implements OnInit {
-
-  constructor() { }
-
-  ngOnInit(): void {
-  }
-
+export class Clipz404Component {
 }

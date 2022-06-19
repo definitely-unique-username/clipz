@@ -1,6 +1,6 @@
 import { Component, ChangeDetectionStrategy, Input, Output, EventEmitter } from '@angular/core';
 import { RegisterData } from '../register-form/register-data.model';
-import { LoginData } from '@clipz/auth';
+import { LoginData } from '../login-form/login-data.model';
 import { CoerceBoolean } from '@clipz/util';
 
 @Component({
@@ -10,7 +10,7 @@ import { CoerceBoolean } from '@clipz/util';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AuthModalComponent{
-  @CoerceBoolean() @Input() public visible: boolean = false;
+  @CoerceBoolean() @Input() public visible = false;
 
   @Output() public readonly modalClose: EventEmitter<void> = new EventEmitter<void>();
   @Output() public readonly register: EventEmitter<RegisterData> = new EventEmitter<RegisterData>();

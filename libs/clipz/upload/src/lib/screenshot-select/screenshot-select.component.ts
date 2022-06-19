@@ -13,7 +13,7 @@ import { emptyFn } from '@clipz/util';
 })
 export class ScreenshotSelectComponent implements ControlValueAccessor {
   @Input() public screenshoots: string[] = [];
-  @Input() public disabled: boolean = false;
+  @Input() public disabled = false;
 
   @Output() public readonly selectedScreenshotChange: EventEmitter<string> = new EventEmitter();
 

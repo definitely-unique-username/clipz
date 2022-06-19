@@ -26,7 +26,6 @@ export class ManageComponent implements OnInit {
     private readonly router: Router,
     private readonly clipboard: Clipboard
   ) {
-    this.clips$.subscribe(x => console.log('>>>', x));
   }
 
   public ngOnInit(): void {

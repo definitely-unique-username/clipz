@@ -71,9 +71,9 @@ export class UploadService extends ComponentStore<UploadState> {
 
         return this.urlToBlob(screenshotUrl).pipe(
           switchMap((screenshotBlob: Blob) => {
-            const clipFileName: string = `${uuid()}.mp4`;
+            const clipFileName = `${uuid()}.mp4`;
             const { uploadSnapshot$: clipUploadSbapshot$, uploadTask: clipUploadTask }: UploadData = this.clipsService.upload(clipFileName, file as File);
-            const screenshotFileName: string = `${uuid()}.png`;
+            const screenshotFileName = `${uuid()}.png`;
             const { uploadSnapshot$: screenshotUploadSnapshot$, uploadTask: screenshotUploadTask }: UploadData = this.screenshotsService.upload(screenshotFileName, screenshotBlob)
             this.onUploadData(clipUploadTask, screenshotUploadTask);
 
@@ -128,11 +128,9 @@ export class UploadService extends ComponentStore<UploadState> {
     private readonly ffmpeg: FfmpegService
   ) {
     super(initialState);
-    this.state$.subscribe(console.log);
   }
 
   public initFfmpeg(): void {
-    console.log('initFfmpeg');
     this.initFfmpeg$();
   }
 
@@ -142,7 +140,6 @@ export class UploadService extends ComponentStore<UploadState> {
   }
 
   public createClip(title: string, screenshotUrl: string, timestamp: number = Date.now()): void {
-    console.log('uploadData');
     this.uploadData$({ title, timestamp, screenshotUrl });
   }
 
@@ -158,7 +155,6 @@ export class UploadService extends ComponentStore<UploadState> {
   }
 
   private onInitFfmpegSuccess(): void {
-    console.log('onInitFfmpegSuccess');
     this.patchState({ status: ModelStatus.Success });
   }
 
@@ -168,12 +164,10 @@ export class UploadService extends ComponentStore<UploadState> {
   }
 
   private onGetScreenshots(): void {
-    console.log('onGetScreenshots');
     this.patchState({ status: ModelStatus.Pending });
   }
 
   private onGetScreenshotsSuccess(screenshots: string[]): void {
-    console.log('onGetScreenshotsSuccess');
     this.clearScreenshots();
     this.patchState({ screenshots, status: ModelStatus.Success });
   }
@@ -184,18 +178,15 @@ export class UploadService extends ComponentStore<UploadState> {
   }
 
   private onUploadData(clipUploadTask: UploadTask, screenshotUploadTask: UploadTask): void {
-    console.log('onUploadData');
     this.patchState({ clipUploadTask, screenshotUploadTask, status: ModelStatus.Uploading });
   }
 
   private onUploadDataProgress(clipProgress: number, screenshotProgress: number): void {
     const progress: number = Math.round((clipProgress + screenshotProgress) * 100 / 2) / 100;
-    console.log('onUploadDataProgress', progress, clipProgress, screenshotProgress);
     this.patchState({ progress });
   }
 
   private onUploadDataSuccess(data: CreateClipData): void {
-    console.log('onUploadDataSuccess');
     this.patchState({ clipUploadTask: null, screenshotUploadTask: null });
     this.onCreateClip(data);
   }
@@ -206,12 +197,10 @@ export class UploadService extends ComponentStore<UploadState> {
   }
 
   private onCreateClip(data: CreateClipData): void {
-    console.log('onCreateClip');
     this.createClip$(data);
   }
 
   private onCreateClipSuccess(clipId: string): void {
-    console.log('createClipSuccess');
     this.patchState({ status: ModelStatus.Success });
     this.uploadedSource.next(clipId);
   }

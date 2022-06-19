@@ -10,7 +10,7 @@ import { CoerceBoolean } from '@clipz/util';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class EditVideoModalComponent implements OnChanges {
-  @CoerceBoolean() @Input() public visible: boolean = false;
+  @CoerceBoolean() @Input() public visible = false;
   @Input() public clip: Clip | null = null;
 
   @Output() public readonly modalClose: EventEmitter<void> = new EventEmitter<void>();

@@ -46,7 +46,6 @@ export class HomeService extends BaseClipStoreService<HomeState> {
     private readonly clipsService: ClipsService
   ) {
     super();
-    this.state$.subscribe(console.log);
   }
 
   protected onGetClipsSuccess(clips: Clip[]): void {
