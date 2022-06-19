@@ -1,8 +1,8 @@
-<div class="mt-6 rounded-tl-2xl rounded-br-2xl shadow-xl bg-secondary flex flex-col justify-start">
+<div *ngIf="clip" class="mt-6 rounded-tl-2xl rounded-br-2xl shadow-xl bg-secondary flex flex-col justify-start">
 
     <!-- Image -->
-    <a href="#">
-        <img class="card-img-top rounded-tl-2xl w-full" src="assets/img/1.jpg">
+    <a [routerLink]="['/', 'clip', clip.id]">
+        <img class="card-img-top rounded-tl-2xl w-full" [src]="clip.image" crossorigin>
     </a>
 
     <!-- Body -->
@@ -10,7 +10,7 @@
 
         <!-- Link -->
         <a href="#" class="font-bold mb-2">
-            {{ clip?.title }}
+            {{ clip.title }}
         </a>
         <button (click)="onCopy()" type="button" class="bg-gray-400 text-white px-2 py-1 ml-2 text-sm rounded">
             Copy Link

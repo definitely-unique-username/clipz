@@ -20,7 +20,8 @@
         *ngFor="let clip of clips$ | async; trackBy: trackBy" 
         [clip]="clip"
         (edit)="onEdit(clip)"
-        (delete)="onDelete(clip)">
+        (delete)="onDelete(clip)"
+        (linkCopy)="onCopy(clip)"
         >
         </edit-clip-card>
     </div>

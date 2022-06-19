@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { DocumentReference, Firestore, where, getDocs, query, QuerySnapshot, QueryDocumentSnapshot, doc, updateDoc, getDoc, DocumentSnapshot, deleteDoc, orderBy, limit, startAfter, Query, DocumentData } from '@angular/fire/firestore';
+import { DocumentReference, Firestore, where, getDocs, query, QuerySnapshot, QueryDocumentSnapshot, doc, updateDoc, getDoc, DocumentSnapshot, deleteDoc, orderBy, limit, startAfter, Query, DocumentData, documentId } from '@angular/fire/firestore';
 import { Storage, StorageReference, deleteObject } from '@angular/fire/storage';
 import { collection, CollectionReference, addDoc } from '@angular/fire/firestore';
-import { first, from, map, Observable, switchMap  } from 'rxjs';
+import { first, from, map, Observable, switchMap } from 'rxjs';
 import { Clip } from './util';
 import { AuthService } from './auth.service';
 import { DEFAULT_PAGE_SIZE, FirebaseUser, Sort } from '@clipz/util';
@@ -72,10 +72,24 @@ export class ClipsService extends StorageEntity {
       ? query(this.collection, orderBy('timestamp', sort), startAfter(lastSnapshot), limit(take))
       : query(this.collection, orderBy('timestamp', sort), limit(take));
 
-      return from(getDocs(q)).pipe(
+    return from(getDocs(q)).pipe(
       map((snapshot: QuerySnapshot<Clip>) => snapshot.docs),
       map((docs: QueryDocumentSnapshot<Clip>[]) => docs.map((d: QueryDocumentSnapshot<Clip>) => ({ ...d.data(), id: d.id })))
     );
+  }
+
+  public getClip(id: string): Observable<Clip | null> {
+    const q: Query<Clip> = query(this.collection, where(documentId(), '==', id));
+
+    return from(getDocs(q)).pipe(
+      map((snapshot: QuerySnapshot<Clip>) => snapshot.docs),
+      map((docs: QueryDocumentSnapshot<Clip>[]) => docs[0]),
+      map((doc: QueryDocumentSnapshot<Clip>) => {
+        const d = doc.data();
+
+        return d ? { ...d, id } : null;
+      })
+    )
   }
 
   public updateClip(id: string, changes: Partial<Clip>): Observable<Clip> {

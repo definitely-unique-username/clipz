@@ -1,0 +1,26 @@
+{
+  "projectType": "library",
+  "root": "libs/clipz/common/components/clips-list",
+  "sourceRoot": "libs/clipz/common/components/clips-list/src",
+  "prefix": "clipz",
+  "targets": {
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/clipz/common/components/clips-list"],
+      "options": {
+        "jestConfig": "libs/clipz/common/components/clips-list/jest.config.js",
+        "passWithNoTests": true
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "libs/clipz/common/components/clips-list/src/**/*.ts",
+          "libs/clipz/common/components/clips-list/src/**/*.html"
+        ]
+      }
+    }
+  },
+  "tags": []
+}

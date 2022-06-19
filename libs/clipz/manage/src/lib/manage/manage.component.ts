@@ -1,4 +1,5 @@
 import { Component, ChangeDetectionStrategy, TrackByFunction, OnInit } from '@angular/core';
+import { Clipboard } from '@angular/cdk/clipboard';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Clip } from '@clipz/core';
 import { Sort, trackById } from '@clipz/util';
@@ -22,13 +23,14 @@ export class ManageComponent implements OnInit {
   constructor(
     private readonly manageStoreService: ManageStoreService,
     private readonly route: ActivatedRoute,
-    private readonly router: Router
+    private readonly router: Router,
+    private readonly clipboard: Clipboard
   ) {
-    this.clips$.subscribe( x => console.log('>>>', x));
-   }
+    this.clips$.subscribe(x => console.log('>>>', x));
+  }
 
   public ngOnInit(): void {
-      this.manageStoreService.requestClips();
+    this.manageStoreService.getClips();
   }
 
   public onSortChange(e: Event): void {
@@ -38,6 +40,11 @@ export class ManageComponent implements OnInit {
 
   public onEdit(clip: Clip): void {
     this.manageStoreService.setActive(clip.id);
+  }
+
+  public onCopy(clip: Clip): void {
+    this.clipboard.copy(`${location.origin}/clip/${clip.id}`);
+    alert('Link copied');
   }
 
   public onDelete(clip: Clip): void {

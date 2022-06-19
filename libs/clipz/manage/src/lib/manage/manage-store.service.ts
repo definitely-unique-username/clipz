@@ -1,45 +1,25 @@
 import { Injectable } from '@angular/core';
-import { Clip, ClipsService, ScreenshotsService, selectQueryParam } from '@clipz/core';
+import { BaseClipState, BaseClipStoreService, Clip, ClipsService, ScreenshotsService, selectQueryParam } from '@clipz/core';
 import { isSort, ModelStatus, Sort } from '@clipz/util';
-import { ComponentStore, tapResponse } from '@ngrx/component-store';
-import { createEntityAdapter, EntityState } from '@ngrx/entity';
-import { EntitySelectors, UpdateStr } from '@ngrx/entity/src/models';
+import { tapResponse } from '@ngrx/component-store';
+import { UpdateStr } from '@ngrx/entity/src/models';
 import { Store, select } from '@ngrx/store';
 import { distinctUntilChanged, exhaustMap, forkJoin, map, mergeMap, Observable, shareReplay, switchMap, tap, withLatestFrom } from 'rxjs';
 import { SORT_QUERY_PARAM } from './util/sort-query-param';
 
 
-export interface ManageState extends EntityState<Clip> {
-  status: ModelStatus;
-  sort: Sort;
+export interface ManageState extends BaseClipState {
   activeId: string | null;
 }
 
-const manageAdapter = createEntityAdapter({
-  selectId: (clip: Clip) => clip.id,
-});
-
-const initialState: ManageState = manageAdapter.getInitialState({
-  status: ModelStatus.Init,
-  sort: Sort.DESC,
-  activeId: null
-});
-
-const { selectAll: selectClips }: EntitySelectors<Clip, ManageState> = manageAdapter.getSelectors();
-
 @Injectable()
-export class ManageStoreService extends ComponentStore<ManageState> {
-  public readonly status$: Observable<ModelStatus> = this.select((state: ManageState) => state.status);
-  public readonly init$: Observable<boolean> = this.status$.pipe(map((status: ModelStatus) => status === ModelStatus.Init));
-  public readonly pending$: Observable<boolean> = this.status$.pipe(map((status: ModelStatus) => status === ModelStatus.Pending));
-  public readonly clips$: Observable<Clip[]> = this.select(selectClips);
-  public readonly sort$: Observable<Sort> = this.select((state: ManageState) => state.sort);
+export class ManageStoreService extends BaseClipStoreService<ManageState> {
   public readonly activeClip$: Observable<Clip | null> = this.select((state: ManageState) => {
     const id = state.activeId;
     return id ? state.entities[id] ?? null : null;
   }).pipe(shareReplay({ bufferSize: 1, refCount: true }));
 
-  public readonly requestClips$ = this.effect((origin$: Observable<void>) =>
+  public readonly getClips$ = this.effect((origin$: Observable<void>) =>
     origin$.pipe(
       withLatestFrom(this.sort$),
       switchMap(([, sort]: [void, Sort]) => {
@@ -51,8 +31,8 @@ export class ManageStoreService extends ComponentStore<ManageState> {
         return this.clipsService.getUserClips(sort);
       }),
       tapResponse(
-        (clips: Clip[]) => { console.log('success', clips); this.onGetUserClipsSuccess(clips); },
-        () => { this.onGetUserClipsError(); }
+        (clips: Clip[]) => { console.log('success', clips); this.onGetClipsSuccess(clips); },
+        () => { this.onGetClipsError(); }
       )
     ));
 
@@ -63,7 +43,7 @@ export class ManageStoreService extends ComponentStore<ManageState> {
       distinctUntilChanged(),
       tap((sort: Sort) => {
         this.patchState({ sort });
-        this.requestClips$();
+        this.getClips$();
       })
     )
   );
@@ -105,12 +85,16 @@ export class ManageStoreService extends ComponentStore<ManageState> {
     private readonly clipsService: ClipsService,
     private readonly screenshotsService: ScreenshotsService
   ) {
-    super(initialState)
+    super()
     this.state$.subscribe(console.log);
   }
 
-  public requestClips(): void {
-    this.requestClips$();
+  public getInitialState(): ManageState {
+    return this.adapter.getInitialState({
+      status: ModelStatus.Init,
+      sort: Sort.DESC,
+      activeId: null
+    });
   }
 
   public setActive(id: string): void {
@@ -130,19 +114,18 @@ export class ManageStoreService extends ComponentStore<ManageState> {
   }
 
   public reset(): void {
-    this.setState(initialState);
+    this.setState(this.getInitialState());
   }
 
-  private onGetUserClipsSuccess(clips: Clip[]): void {
-    this.patchState((state: ManageState) => manageAdapter.setAll(clips, { ...state, status: ModelStatus.Success }));
-  }
-
-  private onGetUserClipsError(): void {
-    this.patchState({ status: ModelStatus.Error });
+  protected onGetClipsSuccess(clips: Clip[]): void {
+    this.patchState((state: ManageState) => ({
+      ...this.adapter.addMany(clips, state),
+      status: ModelStatus.Success,
+    }));
   }
 
   private onUpdateUserClipSuccess(clip: Clip): void {
-    this.patchState((state: ManageState) => manageAdapter.updateOne(
+    this.patchState((state: ManageState) => this.adapter.updateOne(
       { id: clip.id, changes: clip },
       { ...state, status: ModelStatus.Success, activeId: null }
     ));
@@ -153,10 +136,10 @@ export class ManageStoreService extends ComponentStore<ManageState> {
   }
 
   private onDeleteClip(id: string): void {
-    this.patchState((state: ManageState) => manageAdapter.removeOne(id, state));
+    this.patchState((state: ManageState) => this.adapter.removeOne(id, state));
   }
 
   private onDeleteClipError(deletedClip: Clip): void {
-    this.patchState((state: ManageState) => manageAdapter.addOne(deletedClip, state));
+    this.patchState((state: ManageState) => this.adapter.addOne(deletedClip, state));
   }
 }

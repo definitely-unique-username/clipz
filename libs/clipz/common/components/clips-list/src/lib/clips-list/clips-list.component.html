@@ -1,6 +1,6 @@
 <!-- Clips List -->
 <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
-    <a *ngFor="let clip of clips; trackBy: trackBy" [routerLink]="['/', 'clip', clip.uid]">
+    <a *ngFor="let clip of clips; trackBy: trackBy" [routerLink]="['/', 'clip', clip.id]">
         <clipz-clip-card [clip]="clip"></clipz-clip-card>
     </a>
 </div>
